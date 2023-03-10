@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <title>Driver Page - Dashboard</title>
+
+    <!-- Custom fonts for this template-->
+    <!--    <link rel="stylesheet"-->
+    <!--          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">-->
+    <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro-v6@44659d9/css/all.min.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet"/>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+
+    <!-- Custom styles for this template-->
+    <link href="/driver_page/css/sb-admin-2.min.css" rel="stylesheet"/>
+
+    <!-- Custom styles for this page -->
+    <link href="/driver_page/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"/>
+</head>
+
+<body id="page-top" onload="checkReload()">
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/ciklo/driver/">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">Driver Page</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0"/>
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active" id="home">
+            <a class="nav-link">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider"/>
+
+        <!-- Nav Item - Tables -->
+        <li class="nav-item" id="trips">
+            <a class="nav-link">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Trips</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block"/>
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- Nav Item - Cyclo -->
+                    <li class="nav-item">
+                        <a class="nav-link">Cyclo Reg:</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" aria-label="Reg-no" aria-describedby="Reg-no" id="reg-no" readonly>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item  mt-4" id="status-cyclo">
+                    </li>
+
+                    <div class="topbar-divider d-none d-sm-block"></div>
+
+                    <!-- Nav Item - Alerts -->
+                    <li class="nav-item dropdown no-arrow mx-1">
+                        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-bell fa-fw"></i>
+                            <!-- Counter - Alerts -->
+                            <span class="badge badge-danger badge-counter" id="counter_badge">0</span>
+                        </a>
+                        <!-- Dropdown - Alerts -->
+                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="alertsDropdown">
+                            <h6 class="dropdown-header">Notification</h6>
+                            <div id="notices">
+                            </div>
+                        </div>
+                    </li>
+
+                    <div class="topbar-divider d-none d-sm-block"></div>
+
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a
+                                class="nav-link dropdown-toggle"
+                                href="#"
+                                id="userDropdown"
+                                role="button"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                            <i class="fa-solid fa-user"></i>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="user"></span>
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+
+                            <a class="dropdown-item" href="http://localhost:8080/ciklo/homepage/">
+                                <i class="fa-solid fa-house mr-2 t text-gray-400"></i> Home Page
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" id="btn-update-account" data-bs-toggle="modal"
+                               data-bs-target="#modal-update-account">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content Dashboard-->
+            <div class="container-fluid" id="dashboard">
+                <!-- Content Row -->
+                <div class="row">
+                    <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Trips (Day)
+                                        </div>
+                                        <div id="trip-day" class="h5 mb-0 font-weight-bold text-gray-800">
+                                            0
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fa fa-bicycle fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            Earnings (Day)
+                                        </div>
+                                        <div id="earning-day" class="h5 mb-0 font-weight-bold text-gray-800">
+                                            0 VND
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Earnings (Annual) Card Example -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                            Trips avg (Monthly)
+                                        </div>
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col-auto">
+                                                <div id="trip-month"
+                                                     class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                                    0
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pending Requests Card Example -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            Earnings avg (Monthly)
+                                        </div>
+                                        <div id="earning-month" class="h5 mb-0 font-weight-bold text-gray-800">
+                                            0 VND
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Row -->
+
+                <div class="row">
+                    <!-- bar Chart -->
+                    <div class="col-xl-6 col-lg-5">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">
+                                    Trips (Monthly) Overview
+                                </h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-bar">
+                                    <canvas id="myBarChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Area Chart -->
+                    <div class="col-xl-6 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">
+                                    Earnings (Monthly) Overview
+                                </h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="myAreaChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Main Content Dashboard -->
+
+            <!--Begin of Main Content Table bill-->
+            <div class="container-fluid" id="table_bills" hidden="true">
+
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">List All Bills</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>Bill ID</th>
+                                    <th>Driver name</th>
+                                    <th>Cyclo reg</th>
+                                    <th>Start Location</th>
+                                    <th>End Location</th>
+                                    <th>Distance</th>
+                                    <th>Date</th>
+                                    <th>Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Begin of Main Content Table bill-->
+        </div>
+
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Your Website 2021</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+    </div>
+    <!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Select "Logout" below if you are ready to end your current session.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                    Cancel
+                </button>
+                <form th:action="@{/logout}" class="form-inline">
+                    <button class="btn btn-outline-danger" type="submit">Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Update Account-->
+<div class="modal fade" id="modal-update-account" tabindex="-1" aria-labelledby="modal-update-account"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Update Account</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        id="close-update"></button>
+
+            </div>
+            <div class="modal-body">
+                <form action="" method="post">
+                    <div class="mb-3" id="update-notice">
+                    </div>
+                    <div class="mb-3">
+                        <input type="email" class="form-control" name="id" id="id" hidden>
+                    </div>
+                    <div class="mb-3">
+                        <label for="username" class="col-form-label">Email: </label>
+                        <input type="email" name="username" class="form-control" id="username" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="firstname" class="col-form-label">First Name: </label>
+                        <input type="text" name="firstname" class="form-control" id="firstname" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastname" class="col-form-label">Last Name: </label>
+                        <input type="text" name="lastname" class="form-control" id="lastname" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="col-form-label">Password: </label>
+                        <input type="password" name="pass" class="form-control" id="password" required>
+                        <div id="notifyPasswordCheck" class="form-text"></div>
+
+                        <div id="" class="form-text shadow p-3 mb-5 bg-body-tertiary rounded my-3">
+                            <div class="progress my-3" role="progressbar" aria-label="Password Strength"
+                                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="height: 5px" id="bar">
+                                <div class="progress-bar" style="width: 0%" id="progressBar"></div>
+                            </div>
+                            <p id="notifyStrength" class=""></p>
+                            <hr class="solid">
+                            <p id="low"><i class="fa-solid fa-circle" id="lowIcon"></i> At least on lowercase character
+                            </p>
+                            <p id="upper"><i class="fa-solid fa-circle" id="upperIcon"></i> At least on uppercase
+                                character</p>
+                            <p id="number"><i class="fa-solid fa-circle" id="numberIcon"></i> At least on number</p>
+                            <p id="special"><i class="fa-solid fa-circle" id="specialIcon"></i> At least on special
+                                character</p>
+                            <p id="length"><i class="fa-solid fa-circle" id="lengthIcon"></i> At least 8 character</p>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password2" class="form-label">Confirm Password (*)</label>
+                        <input type="password" class="form-control" id="password2" name="confirmPassword" required>
+                        <div id="notifyPassword" class="form-text"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone Number (*)</label>
+                        <input type="tel" class="form-control" id="phone" name="cPhone" required>
+                        <div id="notifyPhone" class="form-text"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger border-0" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btn-confirm-update" class="btn btn-primary border-0">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
+        integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.1/axios.min.js"
+        integrity="sha512-NbjaUHU8g0+Y8tMcRtIz0irSU3MjLlEdCvp82MqciVF4R2Ru/eaXHDjNSOvS6EfhRYbmQHuznp/ghbUvcC0NVw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/driver_page/vendor/jquery/jquery.min.js"></script>
+<script src="/driver_page/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/driver_page/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/driver_page/js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="/driver_page/vendor/chart.js/Chart.min.js"></script>
+
+<!-- Table level plugins -->
+<script src="/driver_page/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="/driver_page/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="/driver_page/js/demo/chart-area-demo.js"></script>
+<script src="/driver_page/js/demo/chart-bar-demo.js"></script>
+<script src="/driver_page/js/demo/datatables-demo.js"></script>
+
+
+<!--websocket and stomp for notification-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+
+<!--script custom js-->
+<script src="/custom/js/driverpage.js"></script>
+<script src="/custom/js/websocket.js"></script>
+<script src="/custom/js/bill.js"></script>
+<script src="/custom/js/valid_password.js"></script>
+<script src="/custom/js/check_refresh.js"></script>
+<script src="/custom/js/account.js"></script>
+<script src="/custom/js/notification.js"></script>
+
+
+</body>
+
+</html>
