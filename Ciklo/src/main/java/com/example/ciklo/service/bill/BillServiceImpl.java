@@ -39,13 +39,16 @@ public class BillServiceImpl implements BillService {
                 return false;
             }
             else {
-                Bill bill = new Bill(UUID.fromString(id), cus, driver, cyclo, start_loc, end_loc, distance, time.replace(',', ' '), total);
-
-//                cus.getBill().add(bill);
-//                driver.getBill().add(bill);
-//                cyclo.getBill().add(bill);
-                billRepo.save(bill);
-                return true;
+                if(driver.isDStatus())
+                {
+                    Bill bill = new Bill(UUID.fromString(id), cus, driver, cyclo, start_loc, end_loc, distance, time.replace(',', ' '), total);
+                    billRepo.save(bill);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
 
         } catch (Exception e) {

@@ -1,14 +1,14 @@
-var stompClient = null;
+// var stompClient = null;
 var privateStompClient = null;
 
 var socket = new SockJS('/ws');
-stompClient = Stomp.over(socket);
-stompClient.connect({}, function (frame) {
-    console.log(frame);
-    stompClient.subscribe('/all/messages', function (result) {
-        showMsg(JSON.parse(result.body));
-    });
-});
+// stompClient = Stomp.over(socket);
+// stompClient.connect({}, function (frame) {
+//     console.log(frame);
+//     stompClient.subscribe('/all/messages', function (result) {
+//         showMsg(JSON.parse(result.body));
+//     });
+// });
 
 // socket = new SockJS('/ws');
 // stompClient = Stomp.over(socket);
@@ -19,27 +19,45 @@ stompClient.connect({}, function (frame) {
 //     });
 // });
 
-socket = new SockJS('/ws');
-privateStompClient = Stomp.over(socket);
+var socketRider = new SockJS('/ws');
+privateStompClient = Stomp.over(socketRider);
 privateStompClient.connect({}, function (frame) {
     console.log(frame);
-    privateStompClient.subscribe('/user/driver', function (result) {
-        console.log(result.body)
-        showMsg(JSON.parse(result.body));
-    });
+    setTimeout(function () {
+            privateStompClient.subscribe('/user/driver', function (result) {
+                console.log(result.body)
+                showMsg(JSON.parse(result.body));
+            });
+        }, 500
+    );
 });
 
-socket = new SockJS('/ws');
-privateStompClient = Stomp.over(socket);
+var socketCancel = new SockJS('/ws');
+var cancelStompClient = Stomp.over(socketCancel);
+cancelStompClient.connect({}, function (frame) {
+    console.log(frame);
+    setTimeout(function () {
+            privateStompClient.subscribe('/user/cancel', function (result) {
+                console.log(result.body)
+                showMsgCancel(JSON.parse(result.body));
+            });
+        }, 500
+    );
+});
+
+var socketDriver = new SockJS('/ws');
+privateStompClient = Stomp.over(socketDriver);
 privateStompClient.connect({}, function (frame) {
     console.log(frame);
-    privateStompClient.subscribe('/user/rider', function (result) {
-        console.log(result.body)
-        showMsgRider(JSON.parse(result.body));
-    });
+    setTimeout(function () {
+        privateStompClient.subscribe('/user/rider', function (result) {
+            console.log(result.body)
+            showMsgRider(JSON.parse(result.body));
+        });
+    }, 500)
 });
 
-//User send to all driver
+//------------------------------------User send to all driver-----------------------------------------------------------
 function sendPrivateMessage() {
     const id = document.getElementById("billid").value
     const begin = document.getElementById('beginConfirm').value;
@@ -50,18 +68,42 @@ function sendPrivateMessage() {
     const rider = $("#user").text();
     console.log(id, begin, des, time, distance, rider);
 
-    stompClient.send("/app/application", {},
+    privateStompClient.send("/app/private_driver", {},
         JSON.stringify({
             'id': id,
             'rider': rider,
             'begin': begin,
             'des': des,
             'time': time,
-            'distance': distance
+            'distance': distance,
+            'cancel': false
         }));
 }
 
-//Driver send to rider
+//--------------------------Send Cancel Book----------------------------------------------------------------------------
+
+function sendCancelBillToDriver() {
+
+    const begin = $("#beginning").text();
+    const des = $("#destination").text();
+    const time = $("#duration").text();
+    const distance = $("#dis").text();
+    const rider = $("#rider").text();
+    const id = $("#bid").text();
+
+    cancelStompClient.send("/app/private_cancel", {},
+        JSON.stringify({
+            'id': id,
+            'rider': rider,
+            'begin': begin,
+            'des': des,
+            'time': time,
+            'distance': distance,
+            'cancel': true
+        }));
+}
+
+//-------------------------------Driver send to rider-------------------------------------------------------------------
 function sendConfirmFromDriver() {
 
 
@@ -83,7 +125,7 @@ function sendConfirmFromDriver() {
 
     }
 
-    if ($("#counter_badge").text() == null || $("#counter_badge").text() == null == 0) {
+    if ($("#counter_badge").text() == null || $("#counter_badge").text() == 0) {
         $("#counter_badge").text("0")
     } else {
         $("#counter_badge").text(Math.floor($("#counter_badge").text()) - 1)
@@ -97,7 +139,7 @@ function sendConfirmFromDriver() {
     const distance = document.getElementById('distanceCheck').innerText;
     const rider = document.getElementById('riderCheck').innerText;
 
-    stompClient.send("/app/rider", {},
+    privateStompClient.send("/app/private_rider", {},
         JSON.stringify({
             'id': id,
             'rider': rider,
@@ -105,11 +147,14 @@ function sendConfirmFromDriver() {
             'des': des,
             'time': time,
             'distance': distance,
-            'driver': driver
+            'driver': driver,
+            'cancel': false
         }));
 }
 
-//Save bill in db
+
+
+//----------------------------------Save bill in db--------------------------------------------------------------------
 function saveBill(id) {
 
     const bid = $("#bill_id").text();
@@ -134,16 +179,22 @@ function saveBill(id) {
                         'des': des,
                         'time': time,
                         'distance': distance,
-                        'rider': rider
+                        'rider': rider,
                     },
                 error: function () {
                     console.log("error");
                 },
                 success: function (data) {
+
+                    console.log($("#isCancel").text() === 'true');
+
                     console.log(data);
                     if (data === 'true') {
                         console.log("Save bill")
                         sendConfirmFromDriver();
+
+                        changeStatus(false);
+                        changeStatusAgain();
 
                         uploadData();
 
@@ -154,7 +205,7 @@ function saveBill(id) {
                             "                                            <p class=\"mb-1\">Notice</p>\n" +
                             "                                            <small>" + now + "</small>\n" +
                             "                                        </div>\n" +
-                            "                                        <small class=\"mb-1\">The trip has already taken</small>\n" +
+                            "                                        <small class=\"mb-1\">The trip has already taken, or you have already taken the trip </small>\n" +
                             "                                    </a>");
                         $(".site-mobile-menu-body .site-nav-wrap .badge").text($(".site-mobile-menu-body .site-nav-wrap .activeMsg").length);
                         $(".site-nav .js-clone-nav .badge").text($(".site-nav .js-clone-nav .activeMsg").length);
@@ -180,7 +231,7 @@ function saveBill(id) {
     }
 }
 
-//Change status driver after accept trip
+//----------------------------------Change status driver after accept trip----------------------------------------------
 function changeStatus(status) {
     $.ajax(
         {
@@ -201,10 +252,9 @@ function changeStatus(status) {
 
 function changeStatusAgain() {
     const time = document.getElementById('timeCheck').innerText;
-    setInterval(function()
-    {
+    setInterval(function () {
         changeStatus(true)
-    },  Math.floor(time.substring(0, time.indexOf("min")) * 60000));
+    }, Math.floor(time.substring(0, time.indexOf("min")) * 60000));
 }
 
 //Remove active notice
@@ -241,15 +291,46 @@ function removeMsgActive(id) {
         .prop("onclick", null).off("click");
 }
 
-//Msg for driver
+//---------------------------------- Msg for driver--------------------------------------------------------------------
+
+function showMsgCancel(message)
+{
+    const now = (new Date()).toLocaleString();
+
+    $(".notification-drop .item ul  #notices").prepend("<a onclick=\" removeActive(this.id); \" class=\"msg list-group-item list-group-item-action border border-primary-subtle border-opacity-25 border border-2 bg-info bg-opacity-10 activeMsg\" id=" + "'d" + Math.floor(Math.random() * 100) + "'" + ">\n" +
+        "                                        <div class=\"d-flex w-100 justify-content-between\">\n" +
+        "                                            <p class=\"mb-1\">Cancel Booking</p>\n" +
+        "                                            <small>" + now + "</small>\n" +
+        "                                        </div>\n" +
+        "                                        <small class=\"mb-1\">Booking has been cancel from "+ message.begin + " to " + message.des +"</small>" +
+        "                                    </a>");
+    $(".site-mobile-menu-body .site-nav-wrap .badge").text($(".site-mobile-menu-body .site-nav-wrap .activeMsg").length);
+    $(".site-nav .js-clone-nav .badge").text($(".site-nav .js-clone-nav .activeMsg").length);
+
+    //-----------------------------------------------------------------------------------------------------------------
+    $("div.dropdown-menu div#notices").prepend("<a onclick=\" removeMsgActive(this.id);\" class=\"bg-success text-white bg-opacity-25 dropdown-item d-flex align-items-center msg activeMsg\" href=\"#\" id=" + "'d" + Math.floor(Math.random() * 100) + "'" + ">\n" +
+        "                                    <div class=\"mr-3\">\n" +
+        "                                        <div class=\"icon-circle bg-success\">\n" +
+        "                                           <i class=\"fa-sharp fa-regular fa-location-pin-slash\"></i>\n" +
+        "                                        </div>\n" +
+        "                                    </div>\n" +
+        "                                    <div>\n" +
+        "                                        <div class=\"small\">" + now + "</div>\n" +
+        "                                        <span class=\"fw-bold\" id=\"riderCheck\">" + message.rider + "</span> has cancel the trip from <span class='fw-bold' id=\"beginCheck\">" + message.begin + "</span>" + " to <span class='fw-bold' id=\"desCheck\">" + message.des + "</span> \n" +
+        "                                    </div>\n" +
+        "                                </a>")
+    $("#counter_badge").text($("div.dropdown-menu div#notices .activeMsg").length);
+}
+
 function showMsg(message) {
     console.log("show msg")
     const now = (new Date()).toLocaleString();
 
-    $(".notification-drop .item ul  #notices").prepend("<a onclick=\" removeActive(this.id); saveBill(this.id); changeStatus(false); changeStatusAgain();\" class=\"msg list-group-item list-group-item-action border border-primary-subtle border-opacity-25 border border-2 bg-info bg-opacity-10 activeMsg\" id=" + "'d" + Math.floor(Math.random() * 100) + "'" + ">\n" +
+    $(".notification-drop .item ul  #notices").prepend("<a onclick=\" removeActive(this.id); saveBill(this.id); \" class=\"msg list-group-item list-group-item-action border border-primary-subtle border-opacity-25 border border-2 bg-info bg-opacity-10 activeMsg\" id=" + "'d" + Math.floor(Math.random() * 100) + "'" + ">\n" +
         "                                        <div class=\"d-flex w-100 justify-content-between\">\n" +
         "                                            <p class=\"mb-1\">Booking</p>\n" +
         "                                            <span hidden id='bill_id'>" + message.id + "</span>" +
+        "                                            <span hidden id='isCancel'>" + message.isCancel + "</span>" +
         "                                            <small>" + now + "</small>\n" +
         "                                        </div>\n" +
         "                                        <small class=\"mb-1\"><span class=\"fw-bold\" id=\"riderCheck\">" + message.rider + "</span> has booking the trip in <span class='fw-bold' id=\"beginCheck\">" + message.begin + "</span>" + " to <span class='fw-bold' id=\"desCheck\">" + message.des + "</span> </small><br>\n" +
@@ -259,11 +340,12 @@ function showMsg(message) {
     $(".site-nav .js-clone-nav .badge").text($(".site-nav .js-clone-nav .activeMsg").length);
 
     //-----------------------------------------------------------------------------------------------------------------
-    $("div.dropdown-menu div#notices").prepend("<a onclick=\" removeMsgActive(this.id); saveBill(this.id); changeStatus(false); changeStatusAgain();\" class=\"bg-success text-white bg-opacity-25 dropdown-item d-flex align-items-center msg activeMsg\" href=\"#\" id=" + "'d" + Math.floor(Math.random() * 100) + "'" + ">\n" +
+    $("div.dropdown-menu div#notices").prepend("<a onclick=\" removeMsgActive(this.id); saveBill(this.id);\" class=\"bg-success text-white bg-opacity-25 dropdown-item d-flex align-items-center msg activeMsg\" href=\"#\" id=" + "'d" + Math.floor(Math.random() * 100) + "'" + ">\n" +
         "                                    <div class=\"mr-3\">\n" +
         "                                        <div class=\"icon-circle bg-success\">\n" +
         "                                            <i class=\"fa-solid fa-map-location-dot\"></i>\n" +
         "                                            <span hidden id='bill_id'>" + message.id + "</span>" +
+        "                                            <span hidden id='isCancel'>" + message.isCancel + "</span>" +
         "                                        </div>\n" +
         "                                    </div>\n" +
         "                                    <div>\n" +
@@ -275,7 +357,7 @@ function showMsg(message) {
     $("#counter_badge").text($("div.dropdown-menu div#notices .activeMsg").length);
 }
 
-//Msg for rider
+//----------------------------------Msg for rider--------------------------------------------------------------------
 function showMsgRider(message) {
 
     const now = (new Date()).toLocaleString();

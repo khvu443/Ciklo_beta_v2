@@ -7,9 +7,10 @@ const map = new mapboxgl.Map({
     // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
     style: 'mapbox://styles/mapbox/streets-v12',
     center: [108.32802127180481, 15.877122429437135],
-    zoom: 16.65,
+    zoom: 16,
     projection: "globe",
 });
+
 
 //NavigationControl
 const nav = new mapboxgl.NavigationControl({
@@ -35,4 +36,11 @@ map.on("click", function (e) {
     console.log(loc);
 });
 
+
+// $("#book").on('click', function () {
+//
+//     console.log("loading map size...")
+//     $('.mapboxgl-canvas').css('width', '100%');
+//     map.resize();
+// })
 

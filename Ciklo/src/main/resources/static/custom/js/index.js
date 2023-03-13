@@ -207,6 +207,7 @@ $("#confirm").on("click", function () {
     $("#headerInvoice").html("Waiting for driver <i\n" +
         "                        class=\"fa-solid fa-circle-notch fa-spin\"></i>")
 
+    $("#bid").text($("#billid").val())
     $("#driver").empty();
     $("#rider").text($("#user").text());
     let dis = $("#distance").val()

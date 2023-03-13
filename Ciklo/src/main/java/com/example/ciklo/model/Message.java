@@ -1,5 +1,7 @@
 package com.example.ciklo.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +21,5 @@ public class Message {
     private String des;
     private String time;
     private String distance;
+    private boolean cancel;
 }

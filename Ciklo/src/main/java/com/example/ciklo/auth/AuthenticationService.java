@@ -226,31 +226,6 @@ public class AuthenticationService {
     }
 
     //-------------------------------------------------------------------------------------------
-    //saving id user to cookie
-    public void saveIdToCookie(String req, HttpServletResponse response) {
-
-        if (cusRep.findCustomerByCEmail(req).isPresent()) {
-            Cookie cookie1 = new Cookie("uid", "c" + String.valueOf(cusRep.findCustomerByCEmail(req).get().getCusId()));
-            log.info("Saving id cus in cookie ");
-            cookie1.setMaxAge(10 * 60);
-            cookie1.setPath("/");
-            response.addCookie(cookie1);
-        } else if (driverRep.findByDEmail(req).isPresent()) {
-            Cookie cookie2 = new Cookie("uid", "d" + String.valueOf(driverRep.findByDEmail(req).get().getDriverId()));
-            log.info("Saving id driver in cookie ");
-            cookie2.setMaxAge(10 * 60);
-            cookie2.setPath("/");
-            response.addCookie(cookie2);
-        } else if (adRep.findAdminByAdEmail(req).isPresent()) {
-            Cookie cookie3 = new Cookie("uid", "a" + String.valueOf(adRep.findAdminByAdEmail(req).get().getAdId()));
-            log.info("Saving id admin in cookie ");
-            cookie3.setMaxAge(10 * 60);
-            cookie3.setPath("/");
-            response.addCookie(cookie3);
-        }
-    }
-
-    //-------------------------------------------------------------------------------------------
     //Check if email is already have in DB
     public Customer isUserExist(String email) {
         return cusRep.findCustomerByCEmail(email).orElse(null);
@@ -298,7 +273,6 @@ public class AuthenticationService {
                 if (user != null) {
                     if (service.isTokenValid(authHeader, user)) {
                         log.info("Access {} and refresh {}", service.generateToken(user), service.refreshToken(user));
-                        saveIdToCookie(user.getUsername(), response);
                         return new AuthenticationResponse(service.generateToken(user), service.refreshToken(user));
                     }
                 } else {

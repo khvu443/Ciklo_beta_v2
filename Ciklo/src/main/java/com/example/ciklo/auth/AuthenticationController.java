@@ -122,7 +122,7 @@ public class AuthenticationController<E> {
         log.info("The token from login {}", responseLogin);
 
 
-        if (responseLogin == null) {
+        if (responseLogin.getToken() == null ) {
             log.info("Login fail in controller");
             if (!cusRep.findCustomerByCEmail(request.getEmail()).get().isEnabled()) {
                 redirectAttributes.addFlashAttribute("notice",
@@ -149,9 +149,7 @@ public class AuthenticationController<E> {
             mav.setViewName("redirect:/ciklo/auth/authenticateForm");
         } else {
             log.info("Login Success");
-            service.saveIdToCookie(request.getEmail(), response);
             service.saveTokenToCookie(responseLogin, response);
-
             mav.setViewName("redirect:/ciklo/homepage/");
         }
         return mav;

@@ -29,7 +29,7 @@ function appendToTable(data, tb) {
             [
                 data[i].bid,
                 (data[i].driver.dfirstname + " " + data[i].driver.dlastname),
-                data[i].cyclo.reg_No,
+                data[i].cyclo.regNo,
                 data[i].start_loc,
                 data[i].end_loc,
                 data[i].distance,

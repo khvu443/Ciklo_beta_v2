@@ -71,6 +71,7 @@ function billsData() {
         url: '/ciklo/driver/list_bills', type: 'get', data: {}, error: function () {
             console.log("error");
         }, success: function (data) {
+            console.log(data);
             appendToTable(data, tb);
         }
     })
