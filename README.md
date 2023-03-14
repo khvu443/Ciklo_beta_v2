@@ -25,5 +25,4 @@ Project Ciklo using Spring Boot framework
   
   + Vẫn chưa tìm được cách để fix lại cái size của map
   ![image](https://user-images.githubusercontent.com/83583888/224653084-f2750770-2c9c-414a-9eea-33a3e0bd4ce4.png)
-
-[x]
+[x] #739
