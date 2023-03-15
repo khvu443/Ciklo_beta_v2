@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:sqlserver://localhost:1433;database=CikcloDB_v2;encrypt=true;trustServerCertificate=true
-    username: sa
-    password: binbo123
+    url: jdbc:sqlserver://localhost:1433;database=name_your_DB;encrypt=true;trustServerCertificate=true
+    username: your_account
+    password: your_passrwod
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   jpa:
     hibernate:
