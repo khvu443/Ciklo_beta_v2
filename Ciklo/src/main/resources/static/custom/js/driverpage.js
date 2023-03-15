@@ -1,7 +1,7 @@
 var tb = $("#dataTable").DataTable();
 
 $(document).ready(function () {
-    console.log("loading data")
+    console.log("loading data");
     statisticData()
     axios.get('/ciklo/driver/statistic', {
         params: {}
@@ -100,7 +100,7 @@ $(document).ready(function () {
 //-----------------Start Upload data again and then stop----------------------------------------------------------------
 function uploadData() {
     const statisticInterval = setInterval(statisticData, 3000);
-    const billInterval = setInterval(billsData, 3000);
+    // const billInterval = setInterval(billsData, 3000);
     const areaInterval = setInterval(areaDemo, 3000);
     const barInterval = setInterval(barDemo, 3000);
 
@@ -109,9 +109,9 @@ function uploadData() {
         clearInterval(statisticInterval);
     }, 5000)
 
-    setTimeout(function () {
-        clearInterval(billInterval);
-    }, 5000)
+    // setTimeout(function () {
+    //     clearInterval(billInterval);
+    // }, 5000)
 
     setTimeout(function () {
         clearInterval(areaInterval);
@@ -120,28 +120,6 @@ function uploadData() {
     setTimeout(function () {
         clearInterval(barInterval);
     }, 5000)
-}
-
-//------------------------Change status cyclo---------------------------------------------------------------------------
-
-function changeStatusCyclo() {
-    const reg = $("#reg-no").val();
-
-    $.ajax(
-        {
-            url: '',
-            type: 'post',
-            data: {
-                "reg": reg,
-            },
-            error: function () {
-                console.log("error");
-            },
-            success: function (data) {
-                console.log(data);
-            }
-        }
-    )
 }
 
 //---------------------Change Status of Cyclo---------------------------------------------------------------------------
@@ -186,4 +164,16 @@ function changeStatusCyclo() {
     )
 }
 
+//--------------------------Upload data bill---------------------------------------------------------------------------
 
+$(".upload").on("click", function ()
+{
+    $(".table-responsive").hide();
+    $(".loading").show();
+    setTimeout(function ()
+    {
+        $(".loading").hide();
+        billsData()
+        $(".table-responsive").show();
+    }, 3000);
+})

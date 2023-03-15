@@ -506,9 +506,9 @@ function generateReg() {
 //--------------Upload data for check if in DB have new change----------------------------------------------------------
 function uploadDataAdmin() {
     const statisticAdInterval = setInterval(statisticDataAdmin, 3000);
-    const billAdInterval = setInterval(billsData, 3000);
-    const driverAdInterval = setInterval(driverData, 3000);
-    const cycloAdInterval = setInterval(cycloData, 3000);
+    // const billAdInterval = setInterval(billsData, 3000);
+    // const driverAdInterval = setInterval(driverData, 3000);
+    // const cycloAdInterval = setInterval(cycloData, 3000);
     const areaChartInterval = setInterval(chartAreaAd, 3000);
     const barChartAdInterval = setInterval(chartBarAd, 3000);
 
@@ -516,18 +516,17 @@ function uploadDataAdmin() {
         clearTimeout(statisticAdInterval);
     }, 5000);
 
-    setTimeout(function () {
-        clearTimeout(billAdInterval);
-    }, 5000);
-
-
-    setTimeout(function () {
-        clearTimeout(driverAdInterval);
-    }, 5000);
-
-    setTimeout(function () {
-        clearTimeout(cycloAdInterval);
-    }, 5000);
+    // setTimeout(function () {
+    //     clearTimeout(billAdInterval);
+    // }, 5000);
+    //
+    // setTimeout(function () {
+    //     clearTimeout(driverAdInterval);
+    // }, 5000);
+    //
+    // setTimeout(function () {
+    //     clearTimeout(cycloAdInterval);
+    // }, 5000);
 
     setTimeout(function () {
         clearTimeout(areaChartInterval);
@@ -558,8 +557,37 @@ $(document).ready(function () {
             }
         })
     })
+})
 
+//----------------------------Upload data of driver, bill and cyclo----------------------------------------------------
+$(".upload-driver").on("click", function () {
+    $(".tb-driver").hide();
+    $(".loading-driver").show();
+    setTimeout(function () {
+        $(".loading-driver").hide();
+        driverData()
+        $(".tb-driver").show();
+    }, 3000);
+})
 
+$(".upload-bill").on("click", function () {
+    $(".tb-bill").hide();
+    $(".loading-bill").show();
+    setTimeout(function () {
+        $(".loading-bill").hide();
+        billsData()
+        $(".tb-bill").show();
+    }, 3000);
+})
+
+$(".upload-cyclo").on("click", function () {
+    $(".tb-cyclo").hide();
+    $(".loading-cyclo").show();
+    setTimeout(function () {
+        $(".loading-cyclo").hide();
+        cycloData();
+        $(".tb-cyclo").show();
+    }, 3000);
 })
 
 

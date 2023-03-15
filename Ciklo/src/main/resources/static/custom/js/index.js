@@ -204,6 +204,8 @@ $(document).ready(function () {
 //------------------------------form waiting for driver confirm---------------------------------------------------------
 $("#confirm").on("click", function () {
 
+    $("#book").removeAttr(" data-bs-target").attr("data-bs-target", "#bill");
+
     $("#headerInvoice").html("Waiting for driver <i\n" +
         "                        class=\"fa-solid fa-circle-notch fa-spin\"></i>")
 
@@ -243,8 +245,10 @@ $(document).ready(function () {
         let id = generateUUID();
         // console.log(id);
         $("#rider-form").val($("#user").text());
-        $("#time").empty();
-        $("#distance").empty();
+        $("#time").val('');
+        $("#distance").val('');
+        $("#beginConfirm").val('');
+        $("#destinationConfirm").val('');
 
         $("#billid").val(id);
         $("#mapbox-directions-origin-input .mapboxgl-ctrl-geocoder input").val($("#begin").val()).on("keyup focusout", function () {
@@ -264,6 +268,26 @@ $(document).ready(function () {
         });
     })
 });
+
+//-----------------Change Back to book when someone accept--------------------------------------------------------------
+
+let end = setInterval(function () {
+    if ($("#driver").text() !== '') {
+        console.log("change")
+        let interval = setInterval($("#book").removeAttr("data-bs-target").attr("data-bs-target", "#myModal"), 3000);
+        $("#cancel").hide();
+        setTimeout(function () {
+                clearInterval(interval)
+                clearInterval(end)
+            }, 2000
+        )
+    }
+    else
+    {
+        $("#cancel").show();
+    }
+}, 3000)
+
 
 //------------------Open notice of customer to see detail invoice-------------------------------------------------------
 function showDetailInvoice() {

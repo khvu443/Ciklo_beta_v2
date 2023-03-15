@@ -84,6 +84,8 @@ function sendPrivateMessage() {
 
 function sendCancelBillToDriver() {
 
+    $("#book").removeAttr("data-bs-target").attr("data-bs-target", "#myModal");
+
     const begin = $("#beginning").text();
     const des = $("#destination").text();
     const time = $("#duration").text();
@@ -104,10 +106,9 @@ function sendCancelBillToDriver() {
 }
 
 //-------------------------------Driver send to rider-------------------------------------------------------------------
-function sendConfirmFromDriver() {
 
-
-    //decrease number of new notice in driver page
+function decreaseCounterNotification()
+{    //decrease number of new notice in driver page
     console.log($(".site-mobile-menu-body .site-nav-wrap .badge").text());
     console.log($(".site-nav .js-clone-nav .badge").text());
 
@@ -131,6 +132,10 @@ function sendConfirmFromDriver() {
         $("#counter_badge").text(Math.floor($("#counter_badge").text()) - 1)
     }
 
+}
+
+function sendConfirmFromDriver() {
+
     const id = $("#bill_id").text();
     const driver = $("#user").text();
     const begin = document.getElementById('beginCheck').innerText;
@@ -151,7 +156,6 @@ function sendConfirmFromDriver() {
             'cancel': false
         }));
 }
-
 
 
 //----------------------------------Save bill in db--------------------------------------------------------------------
@@ -185,33 +189,23 @@ function saveBill(id) {
                     console.log("error");
                 },
                 success: function (data) {
+                    const now = (new Date()).toLocaleString();
+                    // console.log(data);
+                    if ($("#idCancel").text() === bid) {
 
-                    console.log($("#isCancel").text() === 'true');
 
-                    console.log(data);
-                    if (data === 'true') {
-                        console.log("Save bill")
-                        sendConfirmFromDriver();
-
-                        changeStatus(false);
-                        changeStatusAgain();
-
-                        uploadData();
-
-                    } else {
-                        const now = (new Date()).toLocaleString();
-                        $(".notification-drop .item ul  #notices").prepend("<a onclick=\"removeActive(this.id);\" class=\"msg list-group-item list-group-item-action border border-primary-subtle border-opacity-25 border border-2 bg-info bg-opacity-10 activeMsg\" id=" + "'d" + Math.floor(Math.random() * 100) + "'" + ">\n" +
+                        $(".notification-drop .item ul  #notices").prepend("<a onclick=\"removeActive(this.id);\" class=\"msg list-group-item list-group-item-action border border-primary-subtle border-opacity-25 border border-2 bg-info bg-opacity-10 activeMsg\" id=" + "'d" + Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9 * Math.pow(10, 12)).toString(36) + "'" + ">\n" +
                             "                                        <div class=\"d-flex w-100 justify-content-between\">\n" +
                             "                                            <p class=\"mb-1\">Notice</p>\n" +
                             "                                            <small>" + now + "</small>\n" +
                             "                                        </div>\n" +
-                            "                                        <small class=\"mb-1\">The trip has already taken, or you have already taken the trip </small>\n" +
+                            "                                        <small class=\"mb-1\">The trip has already cancel </small>\n" +
                             "                                    </a>");
                         $(".site-mobile-menu-body .site-nav-wrap .badge").text($(".site-mobile-menu-body .site-nav-wrap .activeMsg").length);
                         $(".site-nav .js-clone-nav .badge").text($(".site-nav .js-clone-nav .activeMsg").length);
 
                         //-----------------------------------------------------------------------------------------------------------------
-                        $("div.dropdown-menu div#notices").prepend("<a onclick=\"removeMsgActive(this.id);\" class=\"bg-success text-white bg-opacity-25 dropdown-item d-flex align-items-center msg activeMsg\" href=\"#\" id=" + "'d" + Math.floor(Math.random() * 100) + "'" + ">\n" +
+                        $("div.dropdown-menu div#notices").prepend("<a onclick=\"removeMsgActive(this.id);\" class=\"bg-success text-white bg-opacity-25 dropdown-item d-flex align-items-center msg activeMsg\" href=\"#\" id=" + "'d" + Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9 * Math.pow(10, 12)).toString(36) + "'" + ">\n" +
                             "                                    <div class=\"mr-3\">\n" +
                             "                                        <div class=\"icon-circle bg-success\">\n" +
                             "                                            <i class=\"fa-regular fa-brake-warning\"></i>\n" +
@@ -219,12 +213,49 @@ function saveBill(id) {
                             "                                    </div>\n" +
                             "                                    <div>\n" +
                             "                                        <div class=\"small\">" + now + "</div>\n" +
-                            "                                        <span class=\"fw-bold\" id=\"riderCheck\">The trip has already taken</span><br> \n" +
+                            "                                        <span class=\"fw-bold\" id=\"riderCheck\">The trip has already cancel</span><br> \n" +
                             "                                    </div>\n" +
                             "                                </a>")
                         $("#counter_badge").text($("div.dropdown-menu div#notices .activeMsg").length);
 
+                    } else {
+                        if (data === 'true') {
+                            console.log("Save bill")
+                            sendConfirmFromDriver();
+
+                            changeStatus(false);
+                            changeStatusAgain();
+
+                            uploadData();
+
+                        } else {
+                            $(".notification-drop .item ul  #notices").prepend("<a onclick=\"removeActive(this.id);\" class=\"msg list-group-item list-group-item-action border border-primary-subtle border-opacity-25 border border-2 bg-info bg-opacity-10 activeMsg\" id=" + "'d" + Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9 * Math.pow(10, 12)).toString(36) + "'" + ">\n" +
+                                "                                        <div class=\"d-flex w-100 justify-content-between\">\n" +
+                                "                                            <p class=\"mb-1\">Notice</p>\n" +
+                                "                                            <small>" + now + "</small>\n" +
+                                "                                        </div>\n" +
+                                "                                        <small class=\"mb-1\">The trip has already taken, or you have already taken the trip </small>\n" +
+                                "                                    </a>");
+                            $(".site-mobile-menu-body .site-nav-wrap .badge").text($(".site-mobile-menu-body .site-nav-wrap .activeMsg").length);
+                            $(".site-nav .js-clone-nav .badge").text($(".site-nav .js-clone-nav .activeMsg").length);
+
+                            //-----------------------------------------------------------------------------------------------------------------
+                            $("div.dropdown-menu div#notices").prepend("<a onclick=\"removeMsgActive(this.id);\" class=\"bg-success text-white bg-opacity-25 dropdown-item d-flex align-items-center msg activeMsg\" href=\"#\" id=" + "'d" + Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9 * Math.pow(10, 12)).toString(36) + "'" + ">\n" +
+                                "                                    <div class=\"mr-3\">\n" +
+                                "                                        <div class=\"icon-circle bg-success\">\n" +
+                                "                                            <i class=\"fa-regular fa-brake-warning\"></i>\n" +
+                                "                                        </div>\n" +
+                                "                                    </div>\n" +
+                                "                                    <div>\n" +
+                                "                                        <div class=\"small\">" + now + "</div>\n" +
+                                "                                        <span class=\"fw-bold\" id=\"riderCheck\">The trip has already taken</span><br> \n" +
+                                "                                    </div>\n" +
+                                "                                </a>")
+                            $("#counter_badge").text($("div.dropdown-menu div#notices .activeMsg").length);
+
+                        }
                     }
+
                 }
             }
         )
@@ -251,7 +282,9 @@ function changeStatus(status) {
 }
 
 function changeStatusAgain() {
+
     const time = document.getElementById('timeCheck').innerText;
+    console.log("change back to free in " + Math.floor(time.substring(0, time.indexOf("min")) * 60000))
     setInterval(function () {
         changeStatus(true)
     }, Math.floor(time.substring(0, time.indexOf("min")) * 60000));
@@ -259,6 +292,8 @@ function changeStatusAgain() {
 
 //Remove active notice
 function removeActive(id) {
+
+    decreaseCounterNotification();
     console.log(id);
     if (id.includes("d")) {
         $(".site-mobile-menu-body .site-nav-wrap #" + id).removeClass("border-primary-subtle activeMsg bg-info")
@@ -293,22 +328,22 @@ function removeMsgActive(id) {
 
 //---------------------------------- Msg for driver--------------------------------------------------------------------
 
-function showMsgCancel(message)
-{
+function showMsgCancel(message) {
     const now = (new Date()).toLocaleString();
 
-    $(".notification-drop .item ul  #notices").prepend("<a onclick=\" removeActive(this.id); \" class=\"msg list-group-item list-group-item-action border border-primary-subtle border-opacity-25 border border-2 bg-info bg-opacity-10 activeMsg\" id=" + "'d" + Math.floor(Math.random() * 100) + "'" + ">\n" +
+    $(".notification-drop .item ul  #notices").prepend("<a onclick=\" removeActive(this.id); \" class=\"msg list-group-item list-group-item-action border border-primary-subtle border-opacity-25 border border-2 bg-info bg-opacity-10 activeMsg\" id=" + "'d" + Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9 * Math.pow(10, 12)).toString(36) + "'" + ">\n" +
         "                                        <div class=\"d-flex w-100 justify-content-between\">\n" +
         "                                            <p class=\"mb-1\">Cancel Booking</p>\n" +
+        "                                            <span id='idCancel' hidden>" + message.id + "</span>" +
         "                                            <small>" + now + "</small>\n" +
         "                                        </div>\n" +
-        "                                        <small class=\"mb-1\">Booking has been cancel from "+ message.begin + " to " + message.des +"</small>" +
+        "                                        <small class=\"mb-1\">Booking has been cancel from " + message.begin + " to " + message.des + "</small>" +
         "                                    </a>");
     $(".site-mobile-menu-body .site-nav-wrap .badge").text($(".site-mobile-menu-body .site-nav-wrap .activeMsg").length);
     $(".site-nav .js-clone-nav .badge").text($(".site-nav .js-clone-nav .activeMsg").length);
 
     //-----------------------------------------------------------------------------------------------------------------
-    $("div.dropdown-menu div#notices").prepend("<a onclick=\" removeMsgActive(this.id);\" class=\"bg-success text-white bg-opacity-25 dropdown-item d-flex align-items-center msg activeMsg\" href=\"#\" id=" + "'d" + Math.floor(Math.random() * 100) + "'" + ">\n" +
+    $("div.dropdown-menu div#notices").prepend("<a onclick=\" removeMsgActive(this.id);\" class=\"bg-success text-white bg-opacity-25 dropdown-item d-flex align-items-center msg activeMsg\" href=\"#\" id=" + "'d" + Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9 * Math.pow(10, 12)).toString(36) + "'" + ">\n" +
         "                                    <div class=\"mr-3\">\n" +
         "                                        <div class=\"icon-circle bg-success\">\n" +
         "                                           <i class=\"fa-sharp fa-regular fa-location-pin-slash\"></i>\n" +
@@ -326,7 +361,7 @@ function showMsg(message) {
     console.log("show msg")
     const now = (new Date()).toLocaleString();
 
-    $(".notification-drop .item ul  #notices").prepend("<a onclick=\" removeActive(this.id); saveBill(this.id); \" class=\"msg list-group-item list-group-item-action border border-primary-subtle border-opacity-25 border border-2 bg-info bg-opacity-10 activeMsg\" id=" + "'d" + Math.floor(Math.random() * 100) + "'" + ">\n" +
+    $(".notification-drop .item ul  #notices").prepend("<a onclick=\" removeActive(this.id); saveBill(this.id); \" class=\"msg list-group-item list-group-item-action border border-primary-subtle border-opacity-25 border border-2 bg-info bg-opacity-10 activeMsg\" id=" + "'d" + Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9 * Math.pow(10, 12)).toString(36) + "'" + ">\n" +
         "                                        <div class=\"d-flex w-100 justify-content-between\">\n" +
         "                                            <p class=\"mb-1\">Booking</p>\n" +
         "                                            <span hidden id='bill_id'>" + message.id + "</span>" +
@@ -361,7 +396,7 @@ function showMsg(message) {
 function showMsgRider(message) {
 
     const now = (new Date()).toLocaleString();
-    $(".notification-drop .item ul  #notices").prepend("  <a data-bs-target=\"#billNotice\" data-bs-toggle=\"modal\" class=\"msg list-group-item list-group-item-action border border-primary-subtle border-opacity-25 border border-2 bg-info bg-opacity-10 activeMsg\" id=" + "'c" + Math.floor(Math.random() * 100) + "'" + " onclick='showDetailInvoice(); removeActive(this.id)'>\n" +
+    $(".notification-drop .item ul  #notices").prepend("  <a data-bs-target=\"#billNotice\" data-bs-toggle=\"modal\" class=\"msg list-group-item list-group-item-action border border-primary-subtle border-opacity-25 border border-2 bg-info bg-opacity-10 activeMsg\" id=" + "'c" + Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9 * Math.pow(10, 12)).toString(36) + "'" + " onclick='showDetailInvoice(); removeActive(this.id)'>\n" +
         "    <div class=\"d-flex w-100 justify-content-between\">\n" +
         "      <p class=\"mb-1\">Success Book </p>\n" +
         "    <small id='invoice_id'> Booking Id: " + message.id + "</small>" +

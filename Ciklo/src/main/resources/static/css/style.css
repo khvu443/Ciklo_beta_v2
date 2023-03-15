@@ -224,6 +224,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
 }
 
 .site-nav {
+    background-color: #6a98a9;
     padding-top: 20px;
     padding-bottom: 20px;
 }

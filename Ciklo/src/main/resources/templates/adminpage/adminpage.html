@@ -294,10 +294,28 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">List All Bills</h6>
+                        <section class="row">
+                            <section class="col-sm-12 col-lg-6">
+                                <h6 class="m-0 font-weight-bold text-primary">List All Bills</h6>
+                            </section>
+                            <section class="col-sm-12 col-lg-6 text-end">
+                                <a class="upload-bill">
+                                    <i class="fa-duotone fa-rotate fa-lg"></i>
+                                </a>
+                            </section>
+
+                        </section>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
+
+                        <div class="position-relative p-5 loading-bill" style="display: none">
+                            <div class="position-absolute top-50 start-50 translate-middle">
+                                <i class="fa-duotone fa-spinner-third fa-2xl fa-spin"
+                                   style="--fa-secondary-color: limegreen"></i>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive tb-bill">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
@@ -323,7 +341,6 @@
 
             <!--Begin of Main Content Table bill-->
             <div class="container-fluid" id="table_driver" hidden="true">
-
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
@@ -332,15 +349,30 @@
                                 <h6 class="mt-2 font-weight-bold text-primary">List All Drivers</h6>
                             </div>
                             <div class="col-sm-12 col-md-6 col-lg-4 d-flex justify-content-end">
-                                <button type="button" class="btn btn-outline-primary btn-sm" id="btn-add-driver"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#modal-add-driver">Add Driver
-                                </button>
+                                <div class="row justify-content-center">
+                                    <button type="button" class="btn btn-outline-primary btn-sm col-sm-6 col-lg-7"
+                                            id="btn-add-driver"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modal-add-driver">Add Driver
+                                    </button>
+                                    <button class="btn border border-0 upload-driver col-sm-6 col-lg-5">
+                                        <i class="fa-duotone fa-rotate fa-lg"></i>
+                                    </button>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
+
+                        <div class="position-relative p-5 loading-driver" style="display: none">
+                            <div class="position-absolute top-50 start-50 translate-middle">
+                                <i class= "fa-duotone fa-spinner-third fa-2xl  fa-spin"
+                                   style="--fa-secondary-color: limegreen"></i>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive tb-driver">
                             <table class="table table-bordered" id="dataTable_driver" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
@@ -376,15 +408,27 @@
                                 <h6 class="mt-2 font-weight-bold text-primary">List All Cyclo</h6>
                             </div>
                             <div class="col-sm-12 col-md-6 col-lg-4 d-flex justify-content-end">
-                                <button type="button" class="btn btn-outline-primary btn-sm" id="btn-add-cyclo"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#modal-add-cyclo">Add Cyclo
-                                </button>
+                                <div class="row justify-content-center">
+                                    <button type="button" class="btn btn-outline-primary btn-sm  col-sm-6 col-lg-7"
+                                            id="btn-add-cyclo"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modal-add-cyclo">Add Cyclo
+                                    </button>
+                                    <button class="btn border border-0 upload-cyclo col-sm-6 col-lg-5">
+                                        <i class="fa-duotone fa-rotate fa-lg"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
+                        <div class="position-relative p-5 loading-cyclo" style="display: none">
+                            <div class="position-absolute top-50 start-50 translate-middle">
+                                <i class="fa-duotone fa-spinner-third fa-2xl fa-spin"
+                                   style="--fa-secondary-color: limegreen"></i>
+                            </div>
+                        </div>
+                        <div class="table-responsive tb-cyclo">
                             <table class="table table-bordered" id="dataTable_cyclo" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
@@ -457,7 +501,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5">Update Account Admin</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-update"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        id="close-update"></button>
 
             </div>
             <div class="modal-body">
@@ -529,7 +574,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5">Add Driver</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-add-driver"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        id="close-add-driver"></button>
             </div>
             <div class="modal-body">
                 <form action="">

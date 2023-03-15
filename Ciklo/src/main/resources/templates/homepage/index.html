@@ -43,16 +43,10 @@
     <link rel="stylesheet" href="/custom/css/datatable.css">
 
 
-    <style>
-        #map {
-            width: 100%;
-        }
-    </style>
-
     <title>Ciklo Web</title>
 </head>
 
-<body onload="checkReload()">
+<body onload="checkReload()" class="scroll">
 <div class="site-mobile-menu site-navbar-target">
     <div class="site-mobile-menu-header">
         <div class="site-mobile-menu-close">
@@ -62,18 +56,18 @@
     <div class="site-mobile-menu-body"></div>
 </div>
 
-<nav class="site-nav">
+<nav class="site-nav" id="nav">
     <div class="container">
         <div class="site-navigation">
             <a href="/ciklo/homepage/" class="logo m-0">Tour <span class="text-primary">.</span></a>
 
             <ul class="js-clone-nav d-none d-lg-inline-block text-left site-menu float-right">
-                <li class="active"><a href="/ciklo/homepage/">Home</a></li>
-                <li><a href="#our-services">Services</a></li>
-                <li><a href="#testimonials">Testimonials</a></li>
-                <li><a href="#popular-destination">Popular Destination</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="/ciklo/homepage/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#our-services">Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="#popular-destination">Popular Destination</a></li>
+                <li class="nav-item"><a class="nav-link" href="#testimonials">Testimonials</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact">Contact Us</a></li>
                 <!--User has login-->
                 <li class="has-children" id="has-login">
                     <a id="user"></a>
@@ -106,8 +100,11 @@
                                 <span class="visually-hidden">unread messages</span>
                               </span>
                             <ul class="justify-content-center">
-                                <div class="list-group m-2 border border-dark-subtle" id="notices">
+                                <div class="scrollbar scroll" id="scroll">
+                                    <div class="list-group m-2 force-overflow" id="notices">
+                                    </div>
                                 </div>
+
                             </ul>
                         </li>
                     </ul>
@@ -247,7 +244,7 @@
 </div>
 
 <!--Summary form information bill-->
-<div class="modal fade" id="bill" aria-hidden="true" aria-labelledby="bill" tabindex="-1">
+<div class="modal fade" id="bill" data-bs-backdrop="static" aria-hidden="true" aria-labelledby="bill" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -256,43 +253,41 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <table>
+                <table class="table table-striped-columns">
                     <tr>
                         <td><label>Booking id: </label></td>
                         <td></td>
-                        <td><p id="bid"></p></td>
+                        <td><label id="bid"></label></td>
                     </tr>
                     <tr>
                         <td><label>Beginning:</label></td>
                         <td></td>
-                        <td><label>Destination:</label></td>
-
+                        <td><label id="beginning"></label></td>
                     </tr>
                     <tr>
-                        <td><p id="beginning"></p></td>
+                        <td><label>Destination:</label></td>
                         <td></td>
-                        <td><p id="destination"></p></td>
+                        <td><label id="destination"></label></td>
                     </tr>
                     <tr>
                         <td><label>Time: </label></td>
                         <td></td>
-                        <td><label>Distance: </label></td>
-
+                        <td><label id="duration"></label></td>
                     </tr>
                     <tr>
-                        <td><p id="duration"></p></td>
+                        <td><label>Distance: </label></td>
                         <td></td>
-                        <td><p id="dis"></p></td>
+                        <td><label id="dis"></label></td>
                     </tr>
                     <tr>
                         <td><label>Rider: </label></td>
                         <td></td>
-                        <td><p id="rider"></p></td>
+                        <td><label id="rider"></label></td>
                     </tr>
                     <tr>
                         <td><label>Driver: </label></td>
                         <td></td>
-                        <td><p id="driver"></p></td>
+                        <td><label id="driver"></label></td>
                     </tr>
                     <tr>
                         <td><label>Cost: </label></td>
@@ -321,44 +316,42 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <table>
+                <table class="table table-striped-columns">
                     <tr>
-                        <td>Booking id:</td>
-                    </tr>
-                    <tr>
-                        <td id="bill_id"></td>
+                        <td><label>Booking id:</label></td>
+                        <td></td>
+                        <td><label id="bill_id"></label></td>
                     </tr>
                     <tr>
                         <td><label>Beginning:</label></td>
                         <td></td>
-                        <td><label>Destination:</label></td>
-
+                        <td><label id="beginNotice"></label></td>
                     </tr>
                     <tr>
-                        <td><p id="beginNotice"></p></td>
+                        <td><label>Destination:</label></td>
                         <td></td>
-                        <td><p id="destinationNotice"></p></td>
+                        <td><label id="destinationNotice"></label></td>
                     </tr>
                     <tr>
                         <td><label>Time: </label></td>
                         <td></td>
-                        <td><label>Distance: </label></td>
+                        <td><label id="durationNotice"></label></td>
 
                     </tr>
                     <tr>
-                        <td><p id="durationNotice"></p></td>
+                        <td><label>Distance: </label></td>
                         <td></td>
-                        <td><p id="disNotice"></p></td>
+                        <td><label id="disNotice"></label></td>
                     </tr>
                     <tr>
                         <td><label>Rider: </label></td>
                         <td></td>
-                        <td><p id="rider-detail"></p></td>
+                        <td><label id="rider-detail"></label></td>
                     </tr>
                     <tr>
                         <td><label>Driver: </label></td>
                         <td></td>
-                        <td><p id="driverNotice"></p></td>
+                        <td><label id="driverNotice"></label></td>
                     </tr>
                     <tr>
                         <td><label>Cost: </label></td>
@@ -380,22 +373,25 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <table id="example" class="display cell-border" width="100%">
-                    <thead>
-                    <tr>
-                        <th>Bill ID</th>
-                        <th>Driver name</th>
-                        <th>Cyclo reg</th>
-                        <th>Start Location</th>
-                        <th>End Location</th>
-                        <th>Distance</th>
-                        <th>Date</th>
-                        <th>Total</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="example" class="table table-bordered" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Bill ID</th>
+                            <th>Driver name</th>
+                            <th>Cyclo reg</th>
+                            <th>Start Location</th>
+                            <th>End Location</th>
+                            <th>Distance</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </div>
     </div>
@@ -474,223 +470,66 @@
     </div>
 </div>
 
-<div id="our-services" class="untree_co-section">
-    <div class="container">
-        <div class="row mb-5 justify-content-center">
-            <div class="col-lg-6 text-center">
-                <h2 class="section-title text-center mb-3">Our Services</h2>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live
-                    the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large
-                    language ocean.</p>
-            </div>
-        </div>
-        <div class="row align-items-stretch">
-            <div class="col-lg-4 order-lg-1">
-                <div class="h-100">
-                    <div class="frame h-100">
-                        <div class="feature-img-bg h-100"
-                             style="background-image: url('/images/hero-slider-1.jpg');"></div>
-                    </div>
+<div data-bs-spy="scroll" data-bs-target="#nav">
+
+    <div id="our-services" class="untree_co-section">
+        <div class="container">
+            <div class="row mb-5 justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <h2 class="section-title text-center mb-3">Our Services</h2>
+                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there
+                        live
+                        the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a
+                        large
+                        language ocean.</p>
                 </div>
             </div>
-
-            <div class="col-6 col-sm-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-1">
-
-                <div class="feature-1 d-md-flex">
-                    <div class="align-self-center">
-                        <span class="flaticon-house display-4 text-primary"></span>
-                        <h3>Beautiful Condo</h3>
-                        <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>
+            <div class="row align-items-stretch">
+                <div class="col-lg-4 order-lg-1">
+                    <div class="h-100">
+                        <div class="frame h-100">
+                            <div class="feature-img-bg h-100"
+                                 style="background-image: url('/images/hero-slider-1.jpg');"></div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="feature-1 ">
-                    <div class="align-self-center">
-                        <span class="flaticon-restaurant display-4 text-primary"></span>
-                        <h3>Restaurants & Cafe</h3>
-                        <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>
+                <div class="col-6 col-sm-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-1">
+
+                    <div class="feature-1 d-md-flex">
+                        <div class="align-self-center">
+                            <span class="flaticon-house display-4 text-primary"></span>
+                            <h3>Beautiful Condo</h3>
+                            <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>
+                        </div>
                     </div>
+
+                    <div class="feature-1 ">
+                        <div class="align-self-center">
+                            <span class="flaticon-restaurant display-4 text-primary"></span>
+                            <h3>Restaurants & Cafe</h3>
+                            <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>
+                        </div>
+                    </div>
+
                 </div>
 
-            </div>
+                <div class="col-6 col-sm-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-3">
 
-            <div class="col-6 col-sm-6 col-lg-4 feature-1-wrap d-md-flex flex-md-column order-lg-3">
-
-                <div class="feature-1 d-md-flex">
-                    <div class="align-self-center">
-                        <span class="flaticon-mail display-4 text-primary"></span>
-                        <h3>Easy to Connect</h3>
-                        <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>
-                    </div>
-                </div>
-
-                <div class="feature-1 d-md-flex">
-                    <div class="align-self-center">
-                        <span class="flaticon-phone-call display-4 text-primary"></span>
-                        <h3>24/7 Support</h3>
-                        <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<div class="untree_co-section count-numbers py-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-6 col-sm-6 col-md-6 col-lg-3">
-                <div class="counter-wrap">
-                    <div class="counter">
-                        <span class="" data-number="9313">0</span>
-                    </div>
-                    <span class="caption">No. of Travels</span>
-                </div>
-            </div>
-            <div class="col-6 col-sm-6 col-md-6 col-lg-3">
-                <div class="counter-wrap">
-                    <div class="counter">
-                        <span class="" data-number="8492">0</span>
-                    </div>
-                    <span class="caption">No. of Clients</span>
-                </div>
-            </div>
-            <div class="col-6 col-sm-6 col-md-6 col-lg-3">
-                <div class="counter-wrap">
-                    <div class="counter">
-                        <span class="" data-number="100">0</span>
-                    </div>
-                    <span class="caption">No. of Employees</span>
-                </div>
-            </div>
-            <div class="col-6 col-sm-6 col-md-6 col-lg-3">
-                <div class="counter-wrap">
-                    <div class="counter">
-                        <span class="" data-number="120">0</span>
-                    </div>
-                    <span class="caption">No. of Countries</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div id="popular-destination" class="untree_co-section">
-    <div class="container">
-        <div class="row text-center justify-content-center mb-5">
-            <div class="col-lg-7"><h2 class="section-title text-center">Popular Destination</h2></div>
-        </div>
-
-        <div class="owl-carousel owl-3-slider">
-
-            <div class="item">
-                <a class="media-thumb" href="/images/hero-slider-1.jpg" data-fancybox="gallery">
-                    <div class="media-text">
-                        <h3>Pragser Wildsee</h3>
-                        <span class="location">Italy</span>
-                    </div>
-                    <img src="/images/hero-slider-1.jpg" alt="Image" class="img-fluid">
-                </a>
-            </div>
-
-            <div class="item">
-                <a class="media-thumb" href="/images/hero-slider-2.jpg" data-fancybox="gallery">
-                    <div class="media-text">
-                        <h3>Oia</h3>
-                        <span class="location">Greece</span>
-                    </div>
-                    <img src="/images/hero-slider-2.jpg" alt="Image" class="img-fluid">
-                </a>
-            </div>
-
-            <div class="item">
-                <a class="media-thumb" href="/images/hero-slider-3.jpg" data-fancybox="gallery">
-                    <div class="media-text">
-                        <h3>Perhentian Islands</h3>
-                        <span class="location">Malaysia</span>
-                    </div>
-                    <img src="/images/hero-slider-3.jpg" alt="Image" class="img-fluid">
-                </a>
-            </div>
-
-
-            <div class="item">
-                <a class="media-thumb" href="/images/hero-slider-4.jpg" data-fancybox="gallery">
-                    <div class="media-text">
-                        <h3>Rialto Bridge</h3>
-                        <span class="location">Italy</span>
-                    </div>
-                    <img src="/images/hero-slider-4.jpg" alt="Image" class="img-fluid">
-                </a>
-            </div>
-
-            <div class="item">
-                <a class="media-thumb" href="/images/hero-slider-5.jpg" data-fancybox="gallery">
-                    <div class="media-text">
-                        <h3>San Francisco, United States</h3>
-                        <span class="location">United States</span>
-                    </div>
-                    <img src="/images/hero-slider-5.jpg" alt="Image" class="img-fluid">
-                </a>
-            </div>
-
-            <div class="item">
-                <a class="media-thumb" href="/images/hero-slider-1.jpg" data-fancybox="gallery">
-                    <div class="media-text">
-                        <h3>Lake Thun</h3>
-                        <span class="location">Switzerland</span>
-                    </div>
-                    <img src="/images/hero-slider-2.jpg" alt="Image" class="img-fluid">
-                </a>
-            </div>
-
-        </div>
-
-    </div>
-</div>
-
-
-<div id="testimonials" class="untree_co-section testimonial-section mt-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-7 text-center">
-                <h2 class="section-title text-center mb-5">Testimonials</h2>
-
-                <div class="owl-single owl-carousel no-nav">
-                    <div class="testimonial mx-auto">
-                        <figure class="img-wrap">
-                            <img src="/images/person_2.jpg" alt="Image" class="img-fluid">
-                        </figure>
-                        <h3 class="name">Adam Aderson</h3>
-                        <blockquote>
-                            <p>&ldquo;There live the blind texts. Separated they live in Bookmarksgrove right at the
-                                coast of the Semantics, a large language ocean.&rdquo;</p>
-                        </blockquote>
+                    <div class="feature-1 d-md-flex">
+                        <div class="align-self-center">
+                            <span class="flaticon-mail display-4 text-primary"></span>
+                            <h3>Easy to Connect</h3>
+                            <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>
+                        </div>
                     </div>
 
-                    <div class="testimonial mx-auto">
-                        <figure class="img-wrap">
-                            <img src="/images/person_3.jpg" alt="Image" class="img-fluid">
-                        </figure>
-                        <h3 class="name">Lukas Devlin</h3>
-                        <blockquote>
-                            <p>&ldquo;There live the blind texts. Separated they live in Bookmarksgrove right at the
-                                coast of the Semantics, a large language ocean.&rdquo;</p>
-                        </blockquote>
-                    </div>
-
-                    <div class="testimonial mx-auto">
-                        <figure class="img-wrap">
-                            <img src="/images/person_4.jpg" alt="Image" class="img-fluid">
-                        </figure>
-                        <h3 class="name">Kayla Bryant</h3>
-                        <blockquote>
-                            <p>&ldquo;There live the blind texts. Separated they live in Bookmarksgrove right at the
-                                coast of the Semantics, a large language ocean.&rdquo;</p>
-                        </blockquote>
+                    <div class="feature-1 d-md-flex">
+                        <div class="align-self-center">
+                            <span class="flaticon-phone-call display-4 text-primary"></span>
+                            <h3>24/7 Support</h3>
+                            <p class="mb-0">Even the all-powerful Pointing has no control about the blind texts.</p>
+                        </div>
                     </div>
 
                 </div>
@@ -698,66 +537,232 @@
             </div>
         </div>
     </div>
-</div>
 
-<div id="about" class="untree_co-section">
-    <div class="container">
-        <div class="row justify-content-between align-items-center">
+    <div class="untree_co-section count-numbers py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-3">
+                    <div class="counter-wrap">
+                        <div class="counter">
+                            <span class="" data-number="9313">0</span>
+                        </div>
+                        <span class="caption">No. of Travels</span>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-3">
+                    <div class="counter-wrap">
+                        <div class="counter">
+                            <span class="" data-number="8492">0</span>
+                        </div>
+                        <span class="caption">No. of Clients</span>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-3">
+                    <div class="counter-wrap">
+                        <div class="counter">
+                            <span class="" data-number="100">0</span>
+                        </div>
+                        <span class="caption">No. of Employees</span>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-3">
+                    <div class="counter-wrap">
+                        <div class="counter">
+                            <span class="" data-number="120">0</span>
+                        </div>
+                        <span class="caption">No. of Countries</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            <div class="col-lg-6">
-                <figure class="img-play-video">
-                    <a id="play-video" class="video-play-button" href="https://www.youtube.com/watch?v=mwtbEGNABWU"
-                       data-fancybox>
-                        <span></span>
+
+    <div id="popular-destination" class="untree_co-section">
+        <div class="container">
+            <div class="row text-center justify-content-center mb-5">
+                <div class="col-lg-7"><h2 class="section-title text-center">Popular Destination</h2></div>
+            </div>
+
+            <div class="owl-carousel owl-3-slider">
+
+                <div class="item">
+                    <a class="media-thumb" href="/images/hero-slider-1.jpg" data-fancybox="gallery">
+                        <div class="media-text">
+                            <h3>Pragser Wildsee</h3>
+                            <span class="location">Italy</span>
+                        </div>
+                        <img src="/images/hero-slider-1.jpg" alt="Image" class="img-fluid">
                     </a>
-                    <img src="/images/hero-slider-2.jpg" alt="Image" class="img-fluid rounded-20">
-                </figure>
+                </div>
+
+                <div class="item">
+                    <a class="media-thumb" href="/images/hero-slider-2.jpg" data-fancybox="gallery">
+                        <div class="media-text">
+                            <h3>Oia</h3>
+                            <span class="location">Greece</span>
+                        </div>
+                        <img src="/images/hero-slider-2.jpg" alt="Image" class="img-fluid">
+                    </a>
+                </div>
+
+                <div class="item">
+                    <a class="media-thumb" href="/images/hero-slider-3.jpg" data-fancybox="gallery">
+                        <div class="media-text">
+                            <h3>Perhentian Islands</h3>
+                            <span class="location">Malaysia</span>
+                        </div>
+                        <img src="/images/hero-slider-3.jpg" alt="Image" class="img-fluid">
+                    </a>
+                </div>
+
+
+                <div class="item">
+                    <a class="media-thumb" href="/images/hero-slider-4.jpg" data-fancybox="gallery">
+                        <div class="media-text">
+                            <h3>Rialto Bridge</h3>
+                            <span class="location">Italy</span>
+                        </div>
+                        <img src="/images/hero-slider-4.jpg" alt="Image" class="img-fluid">
+                    </a>
+                </div>
+
+                <div class="item">
+                    <a class="media-thumb" href="/images/hero-slider-5.jpg" data-fancybox="gallery">
+                        <div class="media-text">
+                            <h3>San Francisco, United States</h3>
+                            <span class="location">United States</span>
+                        </div>
+                        <img src="/images/hero-slider-5.jpg" alt="Image" class="img-fluid">
+                    </a>
+                </div>
+
+                <div class="item">
+                    <a class="media-thumb" href="/images/hero-slider-1.jpg" data-fancybox="gallery">
+                        <div class="media-text">
+                            <h3>Lake Thun</h3>
+                            <span class="location">Switzerland</span>
+                        </div>
+                        <img src="/images/hero-slider-2.jpg" alt="Image" class="img-fluid">
+                    </a>
+                </div>
+
             </div>
 
-            <div class="col-lg-5">
-                <h2 class="section-title text-left mb-4">Take a look at Tour Video</h2>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live
-                    the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large
-                    language ocean.</p>
-
-                <p class="mb-4">A small river named Duden flows by their place and supplies it with the necessary
-                    regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your
-                    mouth.</p>
-
-                <ul class="list-unstyled two-col clearfix">
-                    <li>Outdoor recreation activities</li>
-                    <li>Airlines</li>
-                    <li>Car Rentals</li>
-                    <li>Cruise Lines</li>
-                    <li>Hotels</li>
-                    <li>Railways</li>
-                    <li>Travel Insurance</li>
-                    <li>Package Tours</li>
-                    <li>Insurance</li>
-                    <li>Guide Books</li>
-                </ul>
-
-                <p><a href="#" class="btn btn-primary">Get Started</a></p>
+        </div>
+    </div>
 
 
+    <div id="testimonials" class="untree_co-section testimonial-section mt-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-7 text-center">
+                    <h2 class="section-title text-center mb-5">Testimonials</h2>
+
+                    <div class="owl-single owl-carousel no-nav">
+                        <div class="testimonial mx-auto">
+                            <figure class="img-wrap">
+                                <img src="/images/person_2.jpg" alt="Image" class="img-fluid">
+                            </figure>
+                            <h3 class="name">Adam Aderson</h3>
+                            <blockquote>
+                                <p>&ldquo;There live the blind texts. Separated they live in Bookmarksgrove right at the
+                                    coast of the Semantics, a large language ocean.&rdquo;</p>
+                            </blockquote>
+                        </div>
+
+                        <div class="testimonial mx-auto">
+                            <figure class="img-wrap">
+                                <img src="/images/person_3.jpg" alt="Image" class="img-fluid">
+                            </figure>
+                            <h3 class="name">Lukas Devlin</h3>
+                            <blockquote>
+                                <p>&ldquo;There live the blind texts. Separated they live in Bookmarksgrove right at the
+                                    coast of the Semantics, a large language ocean.&rdquo;</p>
+                            </blockquote>
+                        </div>
+
+                        <div class="testimonial mx-auto">
+                            <figure class="img-wrap">
+                                <img src="/images/person_4.jpg" alt="Image" class="img-fluid">
+                            </figure>
+                            <h3 class="name">Kayla Bryant</h3>
+                            <blockquote>
+                                <p>&ldquo;There live the blind texts. Separated they live in Bookmarksgrove right at the
+                                    coast of the Semantics, a large language ocean.&rdquo;</p>
+                            </blockquote>
+                        </div>
+
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div id="about" class="untree_co-section">
+        <div class="container">
+            <div class="row justify-content-between align-items-center">
+
+                <div class="col-lg-6">
+                    <figure class="img-play-video">
+                        <a id="play-video" class="video-play-button" href="https://www.youtube.com/watch?v=mwtbEGNABWU"
+                           data-fancybox>
+                            <span></span>
+                        </a>
+                        <img src="/images/hero-slider-2.jpg" alt="Image" class="img-fluid rounded-20">
+                    </figure>
+                </div>
+
+                <div class="col-lg-5">
+                    <h2 class="section-title text-left mb-4">Take a look at Tour Video</h2>
+                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there
+                        live
+                        the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a
+                        large
+                        language ocean.</p>
+
+                    <p class="mb-4">A small river named Duden flows by their place and supplies it with the necessary
+                        regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your
+                        mouth.</p>
+
+                    <ul class="list-unstyled two-col clearfix">
+                        <li>Outdoor recreation activities</li>
+                        <li>Airlines</li>
+                        <li>Car Rentals</li>
+                        <li>Cruise Lines</li>
+                        <li>Hotels</li>
+                        <li>Railways</li>
+                        <li>Travel Insurance</li>
+                        <li>Package Tours</li>
+                        <li>Insurance</li>
+                        <li>Guide Books</li>
+                    </ul>
+
+                    <p><a href="#" class="btn btn-primary">Get Started</a></p>
 
 
-<div id="contact" class="py-5 cta-section">
-    <div class="container">
-        <div class="row text-center">
-            <div class="col-md-12">
-                <h2 class="mb-2 text-white">Lets you Explore the Best. Contact Us Now</h2>
-                <p class="mb-4 lead text-white text-white-opacity">Lorem ipsum dolor sit amet, consectetur adipisicing
-                    elit. Excepturi, fugit?</p>
-                <p class="mb-0"><a href="booking.html" class="btn btn-outline-white text-white btn-md font-weight-bold">Get
-                    in touch</a></p>
+                </div>
             </div>
         </div>
     </div>
+
+    <div id="contact" class="py-5 cta-section">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-12">
+                    <h2 class="mb-2 text-white">Lets you Explore the Best. Contact Us Now</h2>
+                    <p class="mb-4 lead text-white text-white-opacity">Lorem ipsum dolor sit amet, consectetur
+                        adipisicing
+                        elit. Excepturi, fugit?</p>
+                    <p class="mb-0"><a href="booking.html"
+                                       class="btn btn-outline-white text-white btn-md font-weight-bold">Get
+                        in touch</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div class="site-footer">
@@ -842,6 +847,10 @@
     </div>
 </div>
 
+<button onclick="topFunction()" id="myBtn" title="Go to top">
+    <i class="fa-duotone fa-arrow-up-to-line" style="--fa-secondary-color: #101387; --fa-primary-color: #4675b9"></i>
+</button>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
         integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
@@ -911,6 +920,64 @@
         $('#example').DataTable();
     });
 </script>
+
+<script>
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+        scrollFunction()
+        myFunction()
+    };
+</script>
+
+<script>
+    var navbar = document.getElementById("nav");
+    var sticky = navbar.offsetTop;
+
+    function myFunction() {
+        if (window.pageYOffset >= sticky) {
+            navbar.classList.add("sticky")
+        } else {
+            navbar.classList.remove("sticky");
+        }
+    }
+</script>
+
+<script>
+    // Get the button:
+    let mybutton = document.getElementById("myBtn");
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+</script>
+
+<script>
+    setInterval(function () {
+        if ($(".site-mobile-menu-body .site-nav-wrap .activeMsg").length > 3) {
+            $(".site-mobile-menu-body .site-nav-wrap #scroll").css("overflow-y", "scroll");
+        } else {
+            $(".site-mobile-menu-body .site-nav-wrap #scroll").css("overflow-y", "");
+        }
+
+        if ($(".site-nav .js-clone-nav .activeMsg").length > 3) {
+            $(".site-nav .js-clone-nav #scroll").css("overflow-y", "scroll");
+        } else {
+            $(".site-nav .js-clone-nav #scroll").css("overflow-y", "");
+        }
+    }, 2000)
+</script>
+
+
 
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.js"></script>
 <link rel="stylesheet"

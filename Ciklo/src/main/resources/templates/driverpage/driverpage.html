@@ -92,7 +92,8 @@
                     <li class="nav-item">
                         <a class="nav-link">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control" aria-label="Reg-no" aria-describedby="Reg-no" id="reg-no" readonly>
+                                <input type="text" class="form-control" aria-label="Reg-no" aria-describedby="Reg-no"
+                                       id="reg-no" readonly>
                             </div>
                         </a>
                     </li>
@@ -299,11 +300,26 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">List All Bills</h6>
+                        <section class="row">
+                            <section class="col-sm-12 col-lg-6"><h6 class="m-0 font-weight-bold text-primary">List All
+                                Bills</h6></section>
+                            <section class="col-sm-12 col-lg-6 text-end">
+                                <a class="upload">
+                                    <i class="fa-duotone fa-rotate fa-lg"></i>
+                                </a>
+                            </section>
+                        </section>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <div class="position-relative p-5 loading" style="display: none">
+                            <div class="position-absolute top-50 start-50 translate-middle">
+                                <i class="fa-duotone fa-spinner-third fa-2xl fa-spin"
+                                   style="--fa-secondary-color: limegreen"></i>
+                            </div>
+                        </div>
+
+                        <div class=" table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%">
                                 <thead>
                                 <tr>
                                     <th>Bill ID</th>
@@ -409,19 +425,22 @@
 
                         <div id="" class="form-text shadow p-3 mb-5 bg-body-tertiary rounded my-3">
                             <div class="progress my-3" role="progressbar" aria-label="Password Strength"
-                                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="height: 5px" id="bar">
+                                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="height: 5px"
+                                 id="bar">
                                 <div class="progress-bar" style="width: 0%" id="progressBar"></div>
                             </div>
                             <p id="notifyStrength" class=""></p>
                             <hr class="solid">
-                            <p id="low"><i class="fa-solid fa-circle" id="lowIcon"></i> At least on lowercase character
+                            <p id="low"><i class="fa-solid fa-circle" id="lowIcon"></i> At least on lowercase
+                                character
                             </p>
                             <p id="upper"><i class="fa-solid fa-circle" id="upperIcon"></i> At least on uppercase
                                 character</p>
                             <p id="number"><i class="fa-solid fa-circle" id="numberIcon"></i> At least on number</p>
                             <p id="special"><i class="fa-solid fa-circle" id="specialIcon"></i> At least on special
                                 character</p>
-                            <p id="length"><i class="fa-solid fa-circle" id="lengthIcon"></i> At least 8 character</p>
+                            <p id="length"><i class="fa-solid fa-circle" id="lengthIcon"></i> At least 8 character
+                            </p>
                         </div>
                     </div>
                     <div class="mb-3">

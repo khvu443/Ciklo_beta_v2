@@ -23,7 +23,8 @@ function viewAllBills() {
 
 //append data to table for driver and customer
 function appendToTable(data, tb) {
-    tb.clear().draw()
+    tb.rows()
+        .remove();
     for (let i = 0; i < data.length; i++) {
         tb.row.add(
             [
