@@ -25,3 +25,9 @@ Project Ciklo using Spring Boot framework
   
   + Vẫn chưa tìm được cách để fix lại cái size của map
   ![image](https://user-images.githubusercontent.com/83583888/224653084-f2750770-2c9c-414a-9eea-33a3e0bd4ce4.png)
+
+  **Change log v2.0.3**
+- Fixed:
+  + Hoàn thành phần hủy hóa đơn và phần update status của driver
+- Bug v2.0.1
+  + Phần datatable của bill nó sẽ reset lại nên khi chuyển qua trang thứ 2 thì sau khi reset sẽ tự động về lại trang 1
