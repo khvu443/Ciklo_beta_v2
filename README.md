@@ -29,5 +29,9 @@ Project Ciklo using Spring Boot framework
   **Change log v2.0.3**
 - Fixed:
   + Hoàn thành phần hủy hóa đơn và phần update status của driver
-- Bug v2.0.1
+- Bug v2.0.3
   + Phần datatable của bill nó sẽ reset lại nên khi chuyển qua trang thứ 2 thì sau khi reset sẽ tự động về lại trang 1
+  
+  **Change log v2.0.4**
+- Fixed:
+  +Thay đổi cách để upload data bằng cách thủ công - bấm vào nút upload
