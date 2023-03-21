@@ -421,6 +421,15 @@ $("#btn-add-confirm").on('click', function () {
                     // console.log(data);
                     appendNotice(data, "add-driver-notice", "Add");
 
+                    $(".tb-driver").hide();
+                    $(".loading-driver").show();
+
+                    setTimeout(function () {
+                        $(".loading-driver").hide();
+                        driverData()
+                        $(".tb-driver").show();
+                    }, 3000);
+
                     $("form").trigger("reset");
                     $("#dmail").removeAttr("class").attr("class", "form-control");
                     $('#notifyEmail')
@@ -454,8 +463,13 @@ $("#btn-add-cyclo").on("click", function () {
                     console.log("error");
                 },
                 success: function (data) {
-                    // console.log(data);
-                    // console.log($("#reg_no").val())
+                    $(".tb-cyclo").hide();
+                    $(".loading-cyclo").show();
+                    setTimeout(function () {
+                        $(".loading-cyclo").hide();
+                        cycloData();
+                        $(".tb-cyclo").show();
+                    }, 3000);
                     appendNotice(data, "add-cyclo-notice", "Add");
                 }
             }
@@ -559,16 +573,9 @@ $(document).ready(function () {
     })
 })
 
-//----------------------------Upload data of driver, bill and cyclo----------------------------------------------------
-$(".upload-driver").on("click", function () {
-    $(".tb-driver").hide();
-    $(".loading-driver").show();
-    setTimeout(function () {
-        $(".loading-driver").hide();
-        driverData()
-        $(".tb-driver").show();
-    }, 3000);
-})
+//----------------------------Upload data of driver, bill and cyclo----------------------------------------------------\
+
+
 
 $(".upload-bill").on("click", function () {
     $(".tb-bill").hide();

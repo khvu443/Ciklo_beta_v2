@@ -72,8 +72,10 @@ public class AuthenticationService {
                 log.info("Register customer: {}", cus);
                 cusRep.save(cus);
 
+                String link = "http://localhost:8080/ciklo/auth/confirm?token=";
+
                 // create confirm Token
-                sendLinkConfirm(cus);
+                sendLinkConfirm(cus, "Thank you for registering. Please click on the below link to activate your account:", link);
 
                 var jwtToken = service.generateToken(cus);
                 var jwtRefresh = service.refreshToken(cus);
@@ -89,12 +91,11 @@ public class AuthenticationService {
         return null;
     }
 
-    public void sendLinkConfirm(Customer cus)
+    public void sendLinkConfirm(Customer cus, String msg, String link)
     {
         ConfirmToken token = createTokenConfirm(cus);
         confirmTokenService.saveConfirmToken(token);
-        String link = "http://localhost:8080/ciklo/auth/confirm?token=" + token.getToken();
-        emailSender.send(cus.getCEmail(), buildEmail(cus.getCFirstname(), link));
+        emailSender.send(cus.getCEmail(), buildEmail(cus.getCFirstname(), link + token.getToken(), msg));
     }
 
     public ConfirmToken createTokenConfirm(Customer cus) {
@@ -134,6 +135,57 @@ public class AuthenticationService {
         cusRep.enableAppUser(email);
     }
 
+    //------------------------------------------------------------------------------------------
+    //Send confirm reset password
+
+    public void resetPassword(String email)
+    {
+        Customer cus = cusRep.findCustomerByCEmail(email).orElse(null);
+        sendLinkConfirmPassword(cus);
+    }
+
+    private void sendLinkConfirmPassword(Customer cus)
+    {
+        ConfirmToken token = confirmTokenService.getConfirmTokenByCustomer(cus).orElse(null);
+        if (token != null)
+        {
+            emailSender.send(cus.getCEmail(), buildEmail(cus.getCFirstname(), "http://localhost:8080/ciklo/auth/password_confirm?token=" + token.getToken(), "Click below link to reset password:"));
+        }
+
+    }
+
+    @Transactional
+    public int confirmPassword(String token) {
+        ConfirmToken confirmToken = confirmTokenService
+                .getConfirmToken(token)
+                .orElseThrow(() ->
+                        new IllegalStateException("Token not found")
+                );
+
+        if (confirmToken.getConfirmAt() != null) {
+//            log.info("Already confirm");
+            return 1; //Already confirm -> reset password
+        }
+        else {
+            return 0; //Account has not been active
+        }
+    }
+
+    @Transactional
+    public boolean updatePassword(String email, String password)
+    {
+        String pass =encoder.encode(password);
+        try
+        {
+            cusRep.changePassword(email, pass);
+            return true;
+        }catch(Exception e)
+        {
+            log.error("error in change password -> " +  e.getMessage());
+            return false;
+        }
+    }
+
     //-------------------------------------------------------------------------------------------
     public AuthenticationResponse authenticate(AuthenticateRequest request) {
 /*//        manager.authenticate(
@@ -169,8 +221,6 @@ public class AuthenticationService {
                     log.info("Account has not active");
                     return null;
                 }
-
-
 
             case 2:
                 var driver = driverRep.findByDEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException("NOT FOUND DRIVER"));
@@ -352,7 +402,7 @@ public class AuthenticationService {
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    private String buildEmail(String name, String link) {
+    private String buildEmail(String name, String link, String MSG) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
                 "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +
@@ -408,7 +458,7 @@ public class AuthenticationService {
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
                 "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
                 "        \n" +
-                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please click on the below link to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Activate Now</a> </p></blockquote>\n Link will expire in 10 minutes. <p>See you soon</p>" +
+                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">"+ MSG +"</p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Activate Now</a> </p></blockquote>\n Link will expire in 10 minutes. <p>See you soon</p>" +
                 "        \n" +
                 "      </td>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +

@@ -1,6 +1,7 @@
 package com.example.ciklo.service.ConfirmToken;
 
 import com.example.ciklo.model.ConfirmToken;
+import com.example.ciklo.model.Customer;
 import com.example.ciklo.repository.ConfirmTokenRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,11 @@ public class ConfirmTokenServiceImpl implements ConfirmTokenService{
     public int setConfirmToken(String token) {
 
         return confirmTokenRepository.UpdateConfirmAt(token, LocalDateTime.now());
+    }
+
+    @Override
+    public Optional<ConfirmToken> getConfirmTokenByCustomer(Customer cus) {
+        return confirmTokenRepository.findConfirmTokenByCus(cus);
     }
 
 

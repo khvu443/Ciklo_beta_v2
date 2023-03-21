@@ -37,17 +37,6 @@ public class AuthenticationController<E> {
 
     private final ModelAndView mav = new ModelAndView();
 
-    //-------------Register--------------------------------------------------------------------------
-    @GetMapping("/checkEmail")
-    public @ResponseBody String isEmailExist(HttpServletRequest request) {
-        String email = request.getParameter("email");
-//        log.info("Check email from ajax: {}", email);
-//        log.info("Get email check in DB -> {}", service.isUserExist(email));
-        Customer u = service.isUserExist(email);
-        String res = new Gson().toJson(u);
-        return res;
-    }
-
     @GetMapping("/confirm")
     public ModelAndView confirm(@RequestParam("token") String token, final RedirectAttributes redirectAttributes) {
         switch (service.confirmToken(token)) {
@@ -76,6 +65,17 @@ public class AuthenticationController<E> {
                 break;
         }
         return mav;
+    }
+    //-------------Register--------------------------------------------------------------------------
+
+    @GetMapping("/checkEmail")
+    public @ResponseBody String isEmailExist(HttpServletRequest request) {
+        String email = request.getParameter("email");
+//        log.info("Check email from ajax: {}", email);
+        log.info("Get email check in DB -> {}", service.isUserExist(email));
+        Customer u = service.isUserExist(email);
+        String res = new Gson().toJson(u);
+        return res;
     }
 
     @GetMapping("/page-error")
@@ -122,7 +122,7 @@ public class AuthenticationController<E> {
         log.info("The token from login {}", responseLogin);
 
 
-        if (responseLogin.getToken() == null ) {
+        if (responseLogin.getToken() == null) {
             log.info("Login fail in controller");
             if (!cusRep.findCustomerByCEmail(request.getEmail()).get().isEnabled()) {
                 redirectAttributes.addFlashAttribute("notice",
@@ -134,8 +134,7 @@ public class AuthenticationController<E> {
                                 "                            </div>\n" +
                                 "                        </div>");
 
-            } else
-            {
+            } else {
                 redirectAttributes.addFlashAttribute("notice",
                         "<div class=\"alert alert-warning\" role=\"alert\">\n" +
                                 "                            <h5 class=\"alert-heading mt-2\"> Fail Login! Your email or password is wrong</h5>\n" +
@@ -181,7 +180,8 @@ public class AuthenticationController<E> {
     @GetMapping("/re-confirm")
     public ModelAndView reConfirm(@RequestParam("token") String token) {
         Customer cus = confirmTokenService.getConfirmToken(token).get().getCus();
-        service.sendLinkConfirm(cus);
+        String link = "http://localhost:8080/ciklo/auth/confirm?token=";
+        service.sendLinkConfirm(cus, "Thank you for registering. Please click on the below link to activate your account:", link);
         mav.setViewName("redirect:/ciklo/auth/authenticateForm");
         return mav;
     }
@@ -201,7 +201,7 @@ public class AuthenticationController<E> {
     }
 
     @PostMapping("/updateAccount")
-    public  ResponseEntity<String> updateAccount(HttpServletRequest request) {
+    public ResponseEntity<String> updateAccount(HttpServletRequest request) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String id = request.getParameter("id");
         String email = request.getParameter("email");
@@ -211,9 +211,52 @@ public class AuthenticationController<E> {
         String pass = request.getParameter("password");
         log.info("update info: " + email + " - " + fname + " - " + lname + " - " + phone + " - " + pass);
         return new ResponseEntity<>(String.valueOf(service.updateAccountUser(
-                auth.getAuthorities().iterator().next().toString() ,
+                auth.getAuthorities().iterator().next().toString(),
                 id, email,
-                fname,lname,
-                pass, phone)), HttpStatus.OK) ;
+                fname, lname,
+                pass, phone)), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    //reset password form
+    @GetMapping("/send_confirm_password")
+    public ModelAndView resetForm() {
+        mav.setViewName("send_reset_confirm");
+        return mav;
+    }
+
+    //send email token confirm reset password
+    @GetMapping("/send_tkn_pass_confirm")
+    public ResponseEntity<String> resetPassword(HttpServletRequest request) {
+        String email = request.getParameter("email");
+        service.resetPassword(email);
+        return new ResponseEntity<>("true", HttpStatus.OK);
+    }
+
+    @GetMapping("/password_confirm")
+    public ModelAndView passwordConfirm(@RequestParam("token") String token, final RedirectAttributes redirectAttributes) {
+        switch (service.confirmPassword(token)) {
+            case 1:
+                mav.setViewName("send_reset_confirm");
+                mav.addObject("email", confirmTokenService.getConfirmToken(token).get().getCus().getCEmail());
+                mav.addObject("status", "reset");
+                break;
+
+            case 0:
+                redirectAttributes.addFlashAttribute("notice", "Oops");
+                redirectAttributes.addFlashAttribute("alert", "Your Account Has Not Active Yet, Please Active");
+                redirectAttributes.addFlashAttribute("link", "http://localhost:8080/ciklo/auth/authenticateForm");
+                redirectAttributes.addFlashAttribute("type", "Login Page");
+                mav.setViewName("redirect:/ciklo/auth/page-error");
+                break;
+        }
+        return mav;
+    }
+
+    @PutMapping("/reset_password")
+    public ResponseEntity<Boolean> changePassword(@RequestParam("password") String password, @RequestParam("mail") String mail)
+    {
+        log.info("password: " + password +  " mail: " +  mail);
+        return new ResponseEntity<>(service.updatePassword(mail, password), HttpStatus.OK);
     }
 }

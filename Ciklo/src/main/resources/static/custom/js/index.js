@@ -251,10 +251,13 @@ $(document).ready(function () {
         $("#destinationConfirm").val('');
 
         $("#billid").val(id);
-        $("#mapbox-directions-origin-input .mapboxgl-ctrl-geocoder input").val($("#begin").val()).on("keyup focusout", function () {
+        $("#mapbox-directions-origin-input .mapboxgl-ctrl-geocoder input").val($("#begin").val()).on("focusout", function () {
             $("#beginConfirm").val($("#mapbox-directions-origin-input .mapboxgl-ctrl-geocoder input").val());
         });
-        $("#mapbox-directions-destination-input .mapboxgl-ctrl-geocoder input").val($("#destination").val()).on("keyup focusout", function () {
+        $("#mapbox-directions-destination-input .mapboxgl-ctrl-geocoder input").val($("#destination").val()).on("focusout", function () {
+            $("#mapbox-directions-profile-driving-traffic").removeAttr("checked");
+            $("#mapbox-directions-profile-cycling").attr("checked", true);
+
             $("#destinationConfirm").val($("#mapbox-directions-destination-input .mapboxgl-ctrl-geocoder input").val())
 
             let time = $(".mapbox-directions-route-summary h1").text();

@@ -21,4 +21,10 @@ public interface CustomerRepo extends JpaRepository<Customer, Integer> {
     @Query("UPDATE Customer cus " +
             "SET cus.enabled = TRUE WHERE cus.CEmail = ?1")
     int enableAppUser(String email);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Customer cus " +
+            "SET cus.cPassword = ?2 WHERE cus.CEmail = ?1")
+    void changePassword(String email, String password);
 }

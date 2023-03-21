@@ -399,7 +399,7 @@ function showMsgRider(message) {
     $(".notification-drop .item ul  #notices").prepend("  <a data-bs-target=\"#billNotice\" data-bs-toggle=\"modal\" class=\"msg list-group-item list-group-item-action border border-primary-subtle border-opacity-25 border border-2 bg-info bg-opacity-10 activeMsg\" id=" + "'c" + Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9 * Math.pow(10, 12)).toString(36) + "'" + " onclick='showDetailInvoice(); removeActive(this.id)'>\n" +
         "    <div class=\"d-flex w-100 justify-content-between\">\n" +
         "      <p class=\"mb-1\">Success Book </p>\n" +
-        "    <small id='invoice_id'> Booking Id: " + message.id + "</small>" +
+        "    <small id='invoice_id' hidden>" + message.id + "</small>" +
         "    <small>" + now + "</small>\n" +
         "    </div>\n" +
         "    <small class=\"mb-1\"><span class=\"fw-bold\" id=\"riderInvoice\">" + message.driver + "</span> has accepted your book</small><br> \n " +
