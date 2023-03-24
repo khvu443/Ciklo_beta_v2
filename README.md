@@ -34,7 +34,7 @@ For building and running application:
 $ npm install -g maildev
 $ maildev
 ```
-- With mapbox, You should make account to get a token, then copy and patse token in the file `map.js` in folder `custom\js`
+- With mapbox, You should make account to get a token, then copy and patse token to the file `map.js` in folder `custom\js`
 
 ## Running the application locally
 First thing you should do is create database with whatever name you want and go to `application.yml`, if you use authenticate in SQL Server you should copy and paste it
