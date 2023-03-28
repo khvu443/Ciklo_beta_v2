@@ -55,6 +55,7 @@ public class DriverServiceImpl<T> implements DriverService {
     public List<Object> totalBillsInAllMonths(String username) {
         List<Object> list = new ArrayList<>();
         list.add(billRepo.getTotalBillAllMonthsByDriverId(driverRepo.findByDEmail(username).get().getDriverId()));
+        log.info(list.toString());
         return list;
     }
 

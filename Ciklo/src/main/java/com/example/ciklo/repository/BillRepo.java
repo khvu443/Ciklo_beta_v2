@@ -23,15 +23,15 @@ public interface BillRepo<T> extends JpaRepository<Bill, Integer> {
     List<Bill> findBillsByDriver(Driver driver);
     @Query(value = "select * \n" +
             "from _bill\n" +
-            "where driver_driver_id = 1\n" +
-            "  and Cast (CONVERT(datetime2, date_trip, 101) as DATE) = Cast (DATEADD(day, 0, GETDATE()) as date)", nativeQuery = true)
+            "where driver_driver_id = :driverId\n" +
+            "and cast(to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM') as DATE) = cast(now() as date)", nativeQuery = true)
     List<Bill> getBillsTodayByDriverId(@Param("driverId") int driverId);
 
     @Query(
-            value = "select CAST(sum(total) as Decimal(10, 1))\n" +
+            value = "select cast(sum(total) as decimal(10,1))\n" +
                     "from _bill\n" +
-                    "where driver_driver_id = 1\n" +
-                    "  and Cast (CONVERT(datetime2, date_trip, 101) as DATE) = cast(DATEADD(day, 0, GETDATE()) as date)", nativeQuery = true
+                    "where driver_driver_id = :driverId\n" +
+                    "  and cast(to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM') as DATE) = cast(now() as date)", nativeQuery = true
     )
     Double getTotalBillsToday(@Param("driverId") int driverId);
 
@@ -39,131 +39,124 @@ public interface BillRepo<T> extends JpaRepository<Bill, Integer> {
             value = "select *\n" +
                     "from _bill\n" +
                     "where driver_driver_id = :driverId\n" +
-                    "  and MONTH(date_trip) = MONTH((getdate()))", nativeQuery = true
+                    "and EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = extract(month from now())", nativeQuery = true
     )
     List<Bill> getBillsMonthByDriverId(@Param("driverId") int driverId);
 
     @Query(
-            value = "select CAST(sum(total) as Decimal(10,1)) " +
+            value = "select cast (sum(total) as decimal(10,1))" +
                     "from _bill " +
                     "where driver_driver_id = :driverId " +
-                    "and MONTH(date_trip) = MONTH((getdate()))", nativeQuery = true
+                    "and EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = extract(month from now())", nativeQuery = true
     )
     Double getTotalBillsMonth(@Param("driverId") int driverId);
 
     @Query(value = "select\n" +
-            "    cast(sum(IIF(month(date_trip) = 1, total, 0)) as decimal(10,2)) as 'JAN',\n" +
-            "    cast(sum(IIF(month(date_trip) = 2, total, 0))as decimal(10,2))  as 'FEB',\n" +
-            "    cast(sum(IIF(month(date_trip) = 3, total, 0))as decimal(10,2))  as 'MAR',\n" +
-            "    cast(sum(IIF(month(date_trip) = 4, total, 0)) as decimal(10,2)) as 'APR',\n" +
-            "    cast(sum(IIF(month(date_trip) = 5, total, 0))as decimal(10,2))  as 'MAY',\n" +
-            "    cast(sum(IIF(month(date_trip) = 6, total, 0))as decimal(10,2))  as 'JUN',\n" +
-            "    cast(sum(IIF(month(date_trip) = 7, total, 0))as decimal(10,2))  as 'JUL',\n" +
-            "    cast(sum(IIF(month(date_trip) = 8, total, 0))as decimal(10,2))  as 'AUG',\n" +
-            "    cast(sum(IIF(month(date_trip) = 9, total, 0))as decimal(10,2))  as 'SEP',\n" +
-            "    cast(sum(IIF(month(date_trip) = 10, total, 0))as decimal(10,2))  as 'OCT',\n" +
-            "    cast(sum(IIF(month(date_trip) = 11, total, 0))as decimal(10,2))  as 'NOV',\n" +
-            "    cast(sum(IIF(month(date_trip) = 12, total, 0))as decimal(10,2))  as 'DEC'\n" +
+            "sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 1 then total else 0 end) as JAN,\n" +
+            "sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 2 then total else 0 end) as FEB,\n" +
+            "sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 3 then total else 0 end) as MAR,\n" +
+            "sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 4 then total else 0 end) as APR,\n" +
+            "sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 5 then total else 0 end) as MAY,\n" +
+            "sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 6 then total else 0 end) as JUN,\n" +
+            "sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 7 then total else 0 end) as JUL,\n" +
+            "sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 8 then total else 0 end) as AUG,\n" +
+            "sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 9 then total else 0 end) as SEP,\n" +
+            "sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 10 then total else 0 end) as OCT,\n" +
+            "sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 11 then total else 0 end) as NOV,\n" +
+            "sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 12 then total else 0 end) as DEC\n" +
             "from _bill\n" +
             "where driver_driver_id = :driverId\n" +
-            "  and Cast(CONVERT(datetime2, date_trip, 101) as DATE) >=\n" +
-            "      cast(DATEADD(month, 0, '1/1/' + cast(Year(GETDATE()) as varchar)) as date)\n" +
-            "  and Cast(CONVERT(datetime2, date_trip, 101) as date) <=\n" +
-            "      cast(DATEADD(month, 12, '12/31/' + cast(Year(GETDATE()) as varchar)) as date)\n" +
-            "group by YEAR(date_trip)\n", nativeQuery = true)
+            "and to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM') >= to_timestamp( cast (EXTRACT(YEAR from now()) as varchar), 'YYYY  HH12:MI:SS PM')\n" +
+            "and to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM') <= to_timestamp(cast (EXTRACT(YEAR from now()) as varchar), 'YYYY  HH12:MI:SS PM') + interval '1 year'\n" +
+            "GROUP BY  EXTRACT(YEAR FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM'));", nativeQuery = true)
     public T getTotalBillAllMonthsByDriverId(@Param("driverId") int driverId);
 
     @Query(value = "select\n" +
-            "    count(iif(MONTH(date_trip) = 1, date_trip, null)) as 'JAN',\n" +
-            "    count(iif(MONTH(date_trip) = 2, date_trip, null)) as 'FEB',\n" +
-            "    count(iif(MONTH(date_trip) = 3, date_trip, null)) as 'MAR',\n" +
-            "    count(iif(MONTH(date_trip) = 4, date_trip, null)) as 'APR',\n" +
-            "    count(iif(MONTH(date_trip) = 5, date_trip, null)) as 'MAY',\n" +
-            "    count(iif(MONTH(date_trip) = 6, date_trip, null)) as 'JUN',\n" +
-            "    count(iif(MONTH(date_trip) = 7, date_trip, null)) as 'JUL',\n" +
-            "    count(iif(MONTH(date_trip) = 8, date_trip, null)) as 'AUG',\n" +
-            "    count(iif(MONTH(date_trip) = 9, date_trip, null)) as 'SEP',\n" +
-            "    count(iif(MONTH(date_trip) = 10, date_trip, null)) as 'OCT',\n" +
-            "    count(iif(MONTH(date_trip) = 11, date_trip, null)) as 'NOV',\n" +
-            "    count(iif(MONTH(date_trip) = 12, date_trip, null)) as 'DEC'\n" +
-            "\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 1 then date_trip else null end) as JAN,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 2 then date_trip else null end) as FEB,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 3 then date_trip else null end) as MAR,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 4 then date_trip else null end) as APR,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 5 then date_trip else null end) as MAY,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 6 then date_trip else null end) as JUN,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 7 then date_trip else null end) as JUL,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 8 then date_trip else null end) as AUG,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 9 then date_trip else null end) as SEP,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 10 then date_trip else null end) as OCT,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 11 then date_trip else null end) as NOV,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 12 then date_trip else null end) as DEC\n" +
             "from _bill\n" +
-            "where driver_driver_id = 1\n" +
-            "  and Cast(CONVERT(datetime2, date_trip, 101) as DATE) >=\n" +
-            "      cast(DATEADD(month, 0, '1/1/' + cast(Year(GETDATE()) as varchar)) as date)\n" +
-            "  and Cast(CONVERT(datetime2, date_trip, 101) as date) <=\n" +
-            "      cast(DATEADD(month, 12, '12/31/' + cast(Year(GETDATE()) as varchar)) as date)", nativeQuery = true)
+            "where driver_driver_id = :driverId\n" +
+            "and to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM') >= to_timestamp( cast (EXTRACT(YEAR from now()) as varchar), 'YYYY  HH12:MI:SS PM')\n" +
+            "and to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM') <= to_timestamp(cast (EXTRACT(YEAR from now()) as varchar), 'YYYY  HH12:MI:SS PM') + interval '1 year'\n" +
+            "GROUP BY  EXTRACT(YEAR FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM'));", nativeQuery = true)
     public T getNumberTripsAllMonthsByDriverId(@Param("driverId") int driverId);
 
     //----------------------------------------------------------------------------------------------------------------
     //Admin
     @Query(value = "select * \n" +
             "from _bill\n" +
-            "where Cast (CONVERT(datetime2, date_trip, 101) as DATE) = Cast (DATEADD(day, 0, GETDATE()) as date)", nativeQuery = true)
+            "where  cast(to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM') as DATE) = cast(now() as date)", nativeQuery = true)
     List<Bill> getAllBillsToday();
 
     @Query(
             value = "select CAST(sum(total) as Decimal(10, 1))\n" +
                     "from _bill\n" +
-                    "where Cast (CONVERT(datetime2, date_trip, 101) as DATE) = cast(DATEADD(day, 0, GETDATE()) as date)", nativeQuery = true
+                    "where cast(to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM') as DATE) = cast(now() as date)", nativeQuery = true
     )
     Double getTotalAllBillsToday();
 
     @Query(
             value = "select *\n" +
                     "from _bill\n" +
-                    "where MONTH(date_trip) = MONTH((getdate()))", nativeQuery = true
+                    "where EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = extract(month from now())", nativeQuery = true
     )
     List<Bill> getBillsMonth();
 
     @Query(
             value = "select CAST(sum(total) as Decimal(10,1)) " +
                     "from _bill " +
-                    "where MONTH(date_trip) = MONTH((getdate()))", nativeQuery = true
+                    "where EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = extract(month from now())", nativeQuery = true
     )
     Double getTotalAllBillsMonth();
 
 
     @Query(value = "select\n" +
-            "    cast(sum(IIF(month(date_trip) = 1, total, 0)) as decimal(10,2)) as 'JAN',\n" +
-            "    cast(sum(IIF(month(date_trip) = 2, total, 0))as decimal(10,2))  as 'FEB',\n" +
-            "    cast(sum(IIF(month(date_trip) = 3, total, 0))as decimal(10,2))  as 'MAR',\n" +
-            "    cast(sum(IIF(month(date_trip) = 4, total, 0)) as decimal(10,2)) as 'APR',\n" +
-            "    cast(sum(IIF(month(date_trip) = 5, total, 0))as decimal(10,2))  as 'MAY',\n" +
-            "    cast(sum(IIF(month(date_trip) = 6, total, 0))as decimal(10,2))  as 'JUN',\n" +
-            "    cast(sum(IIF(month(date_trip) = 7, total, 0))as decimal(10,2))  as 'JUL',\n" +
-            "    cast(sum(IIF(month(date_trip) = 8, total, 0))as decimal(10,2))  as 'AUG',\n" +
-            "    cast(sum(IIF(month(date_trip) = 9, total, 0))as decimal(10,2))  as 'SEP',\n" +
-            "    cast(sum(IIF(month(date_trip) = 10, total, 0))as decimal(10,2))  as 'OCT',\n" +
-            "    cast(sum(IIF(month(date_trip) = 11, total, 0))as decimal(10,2))  as 'NOV',\n" +
-            "    cast(sum(IIF(month(date_trip) = 12, total, 0))as decimal(10,2))  as 'DEC'\n" +
+            "    sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 1 then total else 0 end) as JAN,\n" +
+            "    sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 2 then total else 0 end) as FEB,\n" +
+            "    sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 3 then total else 0 end) as MAR,\n" +
+            "    sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 4 then total else 0 end) as APR,\n" +
+            "    sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 5 then total else 0 end) as MAY,\n" +
+            "    sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 6 then total else 0 end) as JUN,\n" +
+            "    sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 7 then total else 0 end) as JUL,\n" +
+            "    sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 8 then total else 0 end) as AUG,\n" +
+            "    sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 9 then total else 0 end) as SEP,\n" +
+            "    sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 10 then total else 0 end) as OCT,\n" +
+            "    sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 11 then total else 0 end) as NOV,\n" +
+            "    sum(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 12 then total else 0 end) as DEC\n" +
             "from _bill\n" +
-            "where Cast(CONVERT(datetime2, date_trip, 101) as DATE) >=\n" +
-            "      cast(DATEADD(month, 0, '1/1/' + cast(Year(GETDATE()) as varchar)) as date)\n" +
-            "  and Cast(CONVERT(datetime2, date_trip, 101) as date) <=\n" +
-            "      cast(DATEADD(month, 12, '12/31/' + cast(Year(GETDATE()) as varchar)) as date)\n" +
-            "group by YEAR(date_trip)\n", nativeQuery = true)
+            "where "+
+            "to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM') >= to_timestamp( cast (EXTRACT(YEAR from now()) as varchar), 'YYYY  HH12:MI:SS PM')\n" +
+            "and to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM') <= to_timestamp(cast (EXTRACT(YEAR from now()) as varchar), 'YYYY  HH12:MI:SS PM') + interval '1 year'\n" +
+            "GROUP BY  EXTRACT(YEAR FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM'));", nativeQuery = true)
     public T getTotalBillAllMonths();
 
     @Query(value = "select\n" +
-            "    count(iif(MONTH(date_trip) = 1, date_trip, null)) as 'JAN',\n" +
-            "    count(iif(MONTH(date_trip) = 2, date_trip, null)) as 'FEB',\n" +
-            "    count(iif(MONTH(date_trip) = 3, date_trip, null)) as 'MAR',\n" +
-            "    count(iif(MONTH(date_trip) = 4, date_trip, null)) as 'APR',\n" +
-            "    count(iif(MONTH(date_trip) = 5, date_trip, null)) as 'MAY',\n" +
-            "    count(iif(MONTH(date_trip) = 6, date_trip, null)) as 'JUN',\n" +
-            "    count(iif(MONTH(date_trip) = 7, date_trip, null)) as 'JUL',\n" +
-            "    count(iif(MONTH(date_trip) = 8, date_trip, null)) as 'AUG',\n" +
-            "    count(iif(MONTH(date_trip) = 9, date_trip, null)) as 'SEP',\n" +
-            "    count(iif(MONTH(date_trip) = 10, date_trip, null)) as 'OCT',\n" +
-            "    count(iif(MONTH(date_trip) = 11, date_trip, null)) as 'NOV',\n" +
-            "    count(iif(MONTH(date_trip) = 12, date_trip, null)) as 'DEC'\n" +
-            "\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 1 then date_trip else null end) as JAN,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 2 then date_trip else null end) as FEB,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 3 then date_trip else null end) as MAR,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 4 then date_trip else null end) as APR,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 5 then date_trip else null end) as MAY,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 6 then date_trip else null end) as JUN,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 7 then date_trip else null end) as JUL,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 8 then date_trip else null end) as AUG,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 9 then date_trip else null end) as SEP,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 10 then date_trip else null end) as OCT,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 11 then date_trip else null end) as NOV,\n" +
+            "    count(case when EXTRACT(MONTH FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM')) = 12 then date_trip else null end) as DEC\n" +
             "from _bill\n" +
-            "where Cast(CONVERT(datetime2, date_trip, 101) as DATE) >=\n" +
-            "      cast(DATEADD(month, 0, '1/1/' + cast(Year(GETDATE()) as varchar)) as date)\n" +
-            "  and Cast(CONVERT(datetime2, date_trip, 101) as date) <=\n" +
-            "      cast(DATEADD(month, 12, '12/31/' + cast(Year(GETDATE()) as varchar)) as date)", nativeQuery = true)
+            "where to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM') >= to_timestamp( cast (EXTRACT(YEAR from now()) as varchar), 'YYYY  HH12:MI:SS PM')\n" +
+            "and to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM') <= to_timestamp(cast (EXTRACT(YEAR from now()) as varchar), 'YYYY  HH12:MI:SS PM') + interval '1 year'\n" +
+            "GROUP BY  EXTRACT(YEAR FROM to_timestamp(date_trip, 'MM/DD/YYYY  HH12:MI:SS PM'));", nativeQuery = true)
     public T getNumberTripsAllMonths();
 
 

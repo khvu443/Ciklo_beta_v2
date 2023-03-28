@@ -1,0 +1,34 @@
+version: "3"
+services:
+  web:
+    build: .
+    container_name: ciklo-web
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ciklo
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - db
+  db:
+    image: postgres:15-alpine
+    container_name: ciklo-DB
+    environment:
+      - POSTGRES_USER=lenovo
+      - POSTGRES_PASSWORD=binbo123
+      - POSTGRES_DB=ciklo
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    restart: always
+
+  maildev:
+    image: maildev/maildev
+    ports:
+      - "1080:1080"
+
+networks:
+  common-network:
+    driver: bridge
+volumes:
+  pgdata:

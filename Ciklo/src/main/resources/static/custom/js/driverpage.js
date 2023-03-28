@@ -48,14 +48,14 @@ $(document).ready(function () {
 
     })
 
-    setInterval(uploadData, 5000);
+    // setInterval(uploadData, 5000);
 })
 
 function statisticData() {
     axios.get('/ciklo/driver/statistic', {
         params: {}
     }).then((response) => {
-        // console.log(response.data);
+        console.log(response.data);
         $("#trip-day").empty().text(response.data.today_trips);
         $("#earning-day").empty().text(response.data.total_today_trips + " VND");
         $("#trip-month").empty().text(response.data.month_trips);
