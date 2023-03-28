@@ -124,4 +124,4 @@ For customer, You can sign up but it have confirm email so you should go to this
 
 ## important !!!
 - Map is to small when it appear first so you have to change the size of browser and map is big.
-- For using docker postgresql, use command `$ docker exec -it <container name datasbe/id> bash' then `$ psql -U lenovo -d ciklo` and now you can use any command from psql.
+- For using docker postgresql, use command `$ docker exec -it <container name datasbe/id> bash` then `$ psql -U lenovo -d ciklo` and now you can use any command from psql.
