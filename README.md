@@ -116,11 +116,12 @@ For customer, You can sign up but it have confirm email so you should go to this
   - Soft delete driver (disable account of driver)
   - Can update information account
 - Driver: 
-  - Can accept book from customer by click the notification in nav bar from driver page or in homepage
+  - Can accept book from customer by click the notification in nav bar from driver page or in homepage 
+  `After accept the status driver from free to busy, so I make a auto change for it and the time change to free depend on the time show in form. You should not change to anothe page if the status is not change yet`
   - Change the status of cyclo from `not maintain` to `maintain` by press the icon in navbar from driver page
   - Can update information account
 - Customer can book the cyclo, and update the information account
 
 ## important !!!
-- When customer book the trip, you should enter it twice in the form on the map so that the beginning and destination can appear in form (This is a bug that I haven't found out the way to fix it yet).
 - Map is to small when it appear first so you have to change the size of browser and map is big.
+- For using docker postgresql, use command `$ docker exec -it <container name datasbe/id> bash' then `$ psql -U lenovo -d ciklo` and now you can use any command from psql.
