@@ -19,6 +19,8 @@ Bootstrap 5
 MailDev
 MapBox
 ```
+ ```Now this project can be run by using docker ```
+
 ## Screenshoots
 ![image](https://user-images.githubusercontent.com/83583888/225262037-7f5838b4-0b73-4f57-abfe-53ead584474e.png)
 ![image](https://user-images.githubusercontent.com/83583888/225262173-114b117e-83a5-4881-a73f-c8741a20e358.png)
@@ -33,8 +35,6 @@ For building and running application:
 For using docker to run, you should download [docker](https://www.docker.com/)
 
 ## Usage
-> Now this project can be running by using docker
-
 ### For using docker, I recommend using docker-compose to run this project
   1. Pull three images is [khvu443/ciklo-website](https://hub.docker.com/r/khvu443/ciklo-website), [postgresql](https://hub.docker.com/_/postgres), [maildev](https://hub.docker.com/r/maildev/maildev)
   ```
@@ -104,10 +104,7 @@ For using docker to run, you should download [docker](https://www.docker.com/)
   But you should run command `$ maildev` for using maildev
  
 ## Login & Sign up
-For admin ```
-Email: admin@gmail.com
-Password: 1234
-``` but it doesn't have sign up so the only way to add new admin is insert data to database 
+For admin `Email: admin@gmail.com Password: 1234` but it doesn't have sign up so the only way to add new admin is insert data to database
 For drivers, in database doesn't have any account and cannot sign up so you should login with account admin to add driver and cyclo first.
 
 For customer, You can sign up but it have confirm email so you should go to this `http://127.0.0.1:1080/`. 
