@@ -30,7 +30,7 @@ MapBox
 For building and running application:
 - [JDK 18](https://www.oracle.com/java/technologies/javase/jdk18-archive-downloads.html)
 - [Maven 3.8.5 or latest](https://maven.apache.org/install.html)
-- [Tomcat 10](https://tomcat.apache.org/download-10.cgi)
+- [Tomcat 10](https://tomcat.apache.org/download-10.cgi) 
 
 For using docker to run, you should download [docker](https://www.docker.com/)
 
