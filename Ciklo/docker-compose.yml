@@ -1,7 +1,7 @@
 version: "3"
 services:
   web:
-    build: .
+    image: khvu443/ciklo-website:latest
     container_name: ciklo-web
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ciklo
